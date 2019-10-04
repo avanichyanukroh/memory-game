@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity  } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View  } from 'react-native';
 
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
@@ -12,10 +12,12 @@ const styles = StyleSheet.create({
     title: {
         color: 'white'
     },
-    flipCardContainer: {
-        margin: 16,
+    itemContainer: {
         marginLeft: 'auto',
-        marginRight: 'auto',
+        marginRight: 'auto'
+    },
+    flipCardContainer: {
+        margin: 16
     },
     card: {
         height: 120,
@@ -34,6 +36,52 @@ const styles = StyleSheet.create({
 
 function GameSession() {
 
+    const [isFlipped, setFlipped] = useState(
+        {
+            0: false,
+            1: false,
+            2: false,
+            3: false,
+            4: false,
+            5: false,
+            6: false,
+            7: false,
+            8: false,
+            9: false,
+            10: false,
+            11: false,
+            12: false,
+            13: false,
+            14: false,
+            15: false
+        }
+    );
+    const [isUnlocked, setUnlocked] = useState(
+        {
+            0: true,
+            1: true,
+            2: true,
+            3: true,
+            4: true,
+            5: true,
+            6: true,
+            7: true,
+            8: true,
+            9: true,
+            10: true,
+            11: true,
+            12: true,
+            13: true,
+            14: true,
+            15: true
+        }
+    );
+    const [matchCompare, setMatchCompare] = useState([]);
+
+    function flipCard() {
+            setUnlocked({0: false})
+    }
+
     function shuffle(arr) {
         var i,
             j,
@@ -47,13 +95,29 @@ function GameSession() {
         return arr;    
     };
 
-    function randomizeData() {
-        let shuffle1 = shuffle(sampleData);
+    function randomizeData(data) {
+        let shuffle1 = shuffle(data);
         let shuffle2 = shuffle(shuffle1);
         return shuffle2;
     }
 
+    function compareCards(i, value) {
+        console.log(isFlipped[i]);
+        if (isFlipped[i] === true) {
+            let newArray = matchCompare;
+            newArray.push(value);
+            setMatchCompare(newArray);
+            setUnlocked({0: false});
+            setFlipped({0: true})
+            console.log(isUnlocked[0]);
+        }
+    }
+
     function renderGameGridRow(row) {
+        console.log('re-rendered game grid');
+        if (row === 1) {
+            randomizeData(sampleData)
+        }
         let data = sampleData;
         let startIndex = (row - 1) * 4;
         let endIndex = (row - 1) * 4 + 3;
@@ -61,22 +125,25 @@ function GameSession() {
 
         for (let i = startIndex; i <= endIndex; i++) {
             gameGrid.push(
-                <FlipCard
-                    style={styles.flipCardContainer}
-                    key={i}
-                    flipHorizontal={true}
-                    flipVertical={false}
-                    flip={false}
-                >
-                    {/* Face Side */}
-                    <Container style={[styles.card, styles.backFace]}>
-                        <Text>???????</Text>
-                    </Container>
-                    {/* Back Side */}
-                    <Container style={[styles.card, styles.frontFace]}>
-                        <Text>{data[i].name}</Text>
-                    </Container>
-                </FlipCard>
+                <View key={i} style={styles.itemContainer}>
+                    <FlipCard
+                        style={styles.flipCardContainer}
+                        flipHorizontal={true}
+                        flipVertical={false}
+                        flip={isFlipped[i]}
+                        clickable={isUnlocked[i]}
+                        onFlipEnd={() => compareCards(i, data[i].name)}
+                    >
+                        {/* Face Side */}
+                        <Container style={[styles.card, styles.backFace]}>
+                            <Text>???????</Text>
+                        </Container>
+                        {/* Back Side */}
+                        <Container style={[styles.card, styles.frontFace]}>
+                            <Text>{data[i].name}</Text>
+                        </Container>
+                    </FlipCard>
+                </View>
             );
         }
         return gameGrid;
@@ -109,6 +176,9 @@ function GameSession() {
                         {renderGameGridRow(4)}
                     </Row>
                 </Grid>
+                <Button onPress={flipCard}>
+                    <Text>{isFlipped[1]}</Text>
+                </Button>
             </Content>
       </Container>
     );
