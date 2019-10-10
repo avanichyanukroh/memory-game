@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View  } from 'react-native';
 
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import FlipCard from 'react-native-flip-card'
+import FlipCard from '../components/FlipCard';
 
 const styles = StyleSheet.create({
     header: {
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 
 function GameSession() {
 
+    const [initalizeGame, setInitializeGame] = useState(false);
     const [isFlipped, setFlipped] = useState(
         {
             0: false,
@@ -101,22 +102,41 @@ function GameSession() {
         return shuffle2;
     }
 
-    function compareCards(i, value) {
-        console.log(isFlipped[i]);
-        if (isFlipped[i] === true) {
-            let newArray = matchCompare;
-            newArray.push(value);
-            setMatchCompare(newArray);
-            setUnlocked({0: false});
-            setFlipped({0: true})
-            console.log(isUnlocked[0]);
+    function handleCardFlip(index, value) {
+        if (isUnlocked[index] === true) {
+            console.log('FLIPPED');
+            setMatchCompare([...matchCompare, {index: index, value: value}]);
+            setUnlocked((prevState) => {
+                return  { ...prevState, [index]: false }
+            });
+            setFlipped((prevState) => {
+                return  { ...prevState, [index]: true }
+            });
+        }
+    }
+
+    function handleCardCompare() {
+            console.log('comparing values: ', matchCompare[0], matchCompare[1]);
+        if (matchCompare[0].value !== matchCompare[1].value) {
+            console.log('NOT EQUAL');
+            setUnlocked((prevState) => {
+                return  { ...prevState, [matchCompare[0].index]: true, [matchCompare[1].index]: true }
+            });
+            // setFlipped((prevState) => {
+            //     return  { ...prevState, [matchCompare[0].index]: false, [matchCompare[1].index]: false }
+            // });
+            setMatchCompare([]);
+        }
+        else {
+            console.log('EQUAL');
+            setMatchCompare([]);
         }
     }
 
     function renderGameGridRow(row) {
-        console.log('re-rendered game grid');
-        if (row === 1) {
-            randomizeData(sampleData)
+        if (initalizeGame === false) {
+            randomizeData(sampleData);
+            setInitializeGame(true);
         }
         let data = sampleData;
         let startIndex = (row - 1) * 4;
@@ -132,7 +152,7 @@ function GameSession() {
                         flipVertical={false}
                         flip={isFlipped[i]}
                         clickable={isUnlocked[i]}
-                        onFlipEnd={() => compareCards(i, data[i].name)}
+                        onFlipStart={() => handleCardFlip(i, data[i].name)}
                     >
                         {/* Face Side */}
                         <Container style={[styles.card, styles.backFace]}>
@@ -148,8 +168,21 @@ function GameSession() {
         }
         return gameGrid;
     }
+
+    useEffect(() => {
+        console.log('useEffect()');
+        console.log('matchCompare array: ', matchCompare);
+        // console.log('isUnlocked: ', isUnlocked);
+        // console.log('isFlipped: ', isFlipped);
+        if (matchCompare.length === 2) {
+            console.log('now has 2');
+            handleCardCompare();
+        }
+    });
+
     return (
         <Container>
+            {console.log('render()')}
             <Header style={styles.header}>
                 <Left>
                     <Button transparent>
