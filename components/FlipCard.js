@@ -1,103 +1,122 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   Animated
 } from 'react-native';
 
-export default class animatedbasic extends Component {
-  
-  componentWillMount() {
-    this.animatedValue = new Animated.Value(0);
-    this.value = 0;
-    this.animatedValue.addListener(({ value }) => {
-      this.value = value;
-    })
-    this.frontInterpolate = this.animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['0deg', '180deg'],
-    })
-    this.backInterpolate = this.animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['180deg', '360deg']
-    })
-  }
-  flipCard() {
-      console.log('card status', this.props.isFlipped, this.props.isUnlocked);
-    if (this.props.isFlipped && this.props.isUnlocked) {
-      Animated.spring(this.animatedValue, {
-        toValue: 0,
-        friction: 8,
-        tension: 10
-      }).start();
-      this.props.handleCardFlip();
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      margin: 8
+    },
+    flipCard: {
+      height: 120,
+      width: 80,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'blue',
+      backfaceVisibility: 'hidden',
+    },
+    flipCardBack: {
+      backgroundColor: "red",
+      position: "absolute",
+      top: 0,
+    },
+    flipText: {
+      fontSize: 12,
+      color: 'white'
     }
-    
-    if (!this.props.isFlipped && this.props.isUnlocked) {
-      Animated.spring(this.animatedValue, {
-        toValue: 180,
-        friction: 8,
-        tension: 10
-      }).start();
-    }
-  }
+  });
+
+function FlipCard(props) {
   
-  render() {
+//   componentWillMount() {
+//     animatedValue = new Animated.Value(0);
+//     value = 0;
+//     animatedValue.addListener(({ value }) => {
+//       value = value;
+//     })
+//     frontInterpolate = animatedValue.interpolate({
+//       inputRange: [0, 180],
+//       outputRange: ['0deg', '180deg'],
+//     })
+//     backInterpolate = animatedValue.interpolate({
+//       inputRange: [0, 180],
+//       outputRange: ['180deg', '360deg']
+//     })
+//   }
+
+//   const [flipAnimation] = useState(new Animated.Value(0));
+    const animatedValue = new Animated.Value(0);
+    // animatedValue.addListener(({ value }) => {
+    //     value = value;
+    // })
+    const frontInterpolate = animatedValue.interpolate({
+        inputRange: [0, 180],
+        outputRange: ['0deg', '180deg']
+    })
+    const backInterpolate = animatedValue.interpolate({
+        inputRange: [0, 180],
+        outputRange: ['180deg', '360deg']
+    })
+
+    function flipCard() {
+        console.log('flipCard() ran');
+        if (!props.isFlipped) {
+            console.log('flipCard() TRUE');
+            Animated.spring(animatedValue, {
+                toValue: 0,
+                friction: 8,
+                tension: 10
+            }).start((callback) => console.log('THIS HAPPENS AFTER ANIMATION', callback));
+        }
+        
+        if (props.isFlipped) {
+            console.log('flipCard() FALSE');
+            Animated.spring(animatedValue, {
+                toValue: 180,
+                friction: 8,
+                tension: 10
+            }).start();
+        }
+    }
+
+    useEffect(() => {
+        flipCard();
+    }, [props.isFlipped]);
+
     const frontAnimatedStyle = {
       transform: [
-        { rotateY: this.frontInterpolate}
+        { rotateY: frontInterpolate }
       ]
     }
     const backAnimatedStyle = {
       transform: [
-        { rotateY: this.backInterpolate }
+        { rotateY: backInterpolate }
       ]
     }
+    
     return (
       <View style={styles.container}>
-        <TouchableOpacity activeOpacity={1} onPress={() => this.flipCard()}>
-            <View>
-            <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-                <Text style={styles.flipText}>
-                    Memory!
-                </Text>
-            </Animated.View>
-            <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
-                <Text style={styles.flipText}>
-                    {this.props.description}
-                </Text>
-            </Animated.View>
-            </View>
-        </TouchableOpacity>
+        <View>
+        <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
+            <Text style={styles.flipText}>
+                Memory!
+            </Text>
+        </Animated.View>
+        <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
+            <Text style={styles.flipText}>
+                {props.value}
+            </Text>
+        </Animated.View>
+        </View>
       </View>
     );
-  }
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 8
-  },
-  flipCard: {
-    height: 120,
-    width: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'blue',
-    backfaceVisibility: 'hidden',
-  },
-  flipCardBack: {
-    backgroundColor: "red",
-    position: "absolute",
-    top: 0,
-  },
-  flipText: {
-    fontSize: 12,
-    color: 'white'
-  }
-});
+export default FlipCard;

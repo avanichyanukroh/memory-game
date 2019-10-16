@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, View  } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
@@ -57,31 +57,28 @@ function GameSession() {
             15: false
         }
     );
-    const [isUnlocked, setUnlocked] = useState(
+    const [touchIsDisabled, setTouchIsDisabled] = useState(
         {
-            0: true,
-            1: true,
-            2: true,
-            3: true,
-            4: true,
-            5: true,
-            6: true,
-            7: true,
-            8: true,
-            9: true,
-            10: true,
-            11: true,
-            12: true,
-            13: true,
-            14: true,
-            15: true
+            0: false,
+            1: false,
+            2: false,
+            3: false,
+            4: false,
+            5: false,
+            6: false,
+            7: false,
+            8: false,
+            9: false,
+            10: false,
+            11: false,
+            12: false,
+            13: false,
+            14: false,
+            15: false
         }
     );
+    const [fullTouchDisabled, setFullTouchDisabled] = useState(false);
     const [matchCompare, setMatchCompare] = useState([]);
-
-    function flipCard() {
-            setUnlocked({0: false})
-    }
 
     function shuffle(arr) {
         let i,
@@ -103,15 +100,16 @@ function GameSession() {
     }
 
     function handleCardFlip(index, value) {
-        if (isUnlocked[index] === true) {
-            console.log('FLIPPED');
+        if (touchIsDisabled[index] === false) {
+            console.log('handleCardFlip at', index, value);
             setMatchCompare([...matchCompare, {index: index, value: value}]);
-            setUnlocked((prevState) => {
-                return  { ...prevState, [index]: false }
-            });
             setFlipped((prevState) => {
                 return  { ...prevState, [index]: true }
             });
+            setFullTouchDisabled(true);
+            // setTouchIsDisabled((prevState) => {
+            //     return  { ...prevState, [index]: true }
+            // });
         }
     }
 
@@ -119,10 +117,10 @@ function GameSession() {
             console.log('comparing values: ', matchCompare[0], matchCompare[1]);
         if (matchCompare[0].value !== matchCompare[1].value) {
             console.log('NOT EQUAL');
-            setUnlocked((prevState) => {
-                return  { ...prevState, [matchCompare[0].index]: true, [matchCompare[1].index]: true }
+            setFlipped((prevState) => {
+                return  { ...prevState, [matchCompare[0].index]: false, [matchCompare[1].index]: false }
             });
-            // setFlipped((prevState) => {
+            // setTouchIsDisabled((prevState) => {
             //     return  { ...prevState, [matchCompare[0].index]: false, [matchCompare[1].index]: false }
             // });
             setMatchCompare([]);
@@ -145,33 +143,47 @@ function GameSession() {
 
         for (let i = startIndex; i <= endIndex; i++) {
             gameGrid.push(
-                <View key={i} style={styles.itemContainer}>
-                    <FlipCard
-                        description={data[i].name}
-                        isFlipped={isFlipped[i]}
-                        isUnlocked={isUnlocked[i]}
-                        handleCardFlip={() => handleCardFlip(i, data[i].value)}
-                    />
-                </View>
+                <TouchableOpacity
+                    key={i}
+                    activeOpacity={1}
+                    onPress={() => handleCardFlip(i, data[i].name)}
+                    disabled={isFlipped[i] ? true : fullTouchDisabled}
+                >
+                    <View style={styles.itemContainer}>
+                        <FlipCard
+                            isFlipped={isFlipped[i]}
+                            touchIsDisabled={touchIsDisabled[i]}
+                            value={data[i].name}
+                        />
+                    </View>
+                </TouchableOpacity>
             );
         }
         return gameGrid;
     }
 
     useEffect(() => {
-        console.log('useEffect()');
-        console.log('matchCompare array: ', matchCompare);
-        // console.log('isUnlocked: ', isUnlocked);
-        console.log('isFlipped: ', isFlipped);
+        // console.log('useEffect()');
+        // console.log('matchCompare array: ', matchCompare);
+        // console.log('touchIsDisabled: ', touchIsDisabled);
+        
+        setTimeout(() => {
+            setFullTouchDisabled(false);
+          }, 1000);
+
         if (matchCompare.length === 2) {
-            console.log('now has 2');
-            handleCardCompare();
+            setTimeout(() => {
+                console.log('now has 2');
+                handleCardCompare();
+              }, 1000);
+
         }
-    });
+    }, [matchCompare]);
 
     return (
         <Container>
             {console.log('render()')}
+            {console.log('touchIsDisabled: ', touchIsDisabled)}
             <Header style={styles.header}>
                 <Left>
                     <Button transparent>
@@ -198,9 +210,6 @@ function GameSession() {
                         {renderGameGridRow(4)}
                     </Row>
                 </Grid>
-                <Button onPress={flipCard}>
-                    <Text>{isFlipped[1]}</Text>
-                </Button>
             </Content>
       </Container>
     );
