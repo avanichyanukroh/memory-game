@@ -84,7 +84,7 @@ function GameSession() {
     }
 
     function shuffle(arr) {
-        var i,
+        let i,
             j,
             temp;
         for (i = arr.length - 1; i > 0; i--) {
@@ -147,22 +147,11 @@ function GameSession() {
             gameGrid.push(
                 <View key={i} style={styles.itemContainer}>
                     <FlipCard
-                        style={styles.flipCardContainer}
-                        flipHorizontal={true}
-                        flipVertical={false}
-                        flip={isFlipped[i]}
-                        clickable={isUnlocked[i]}
-                        onFlipStart={() => handleCardFlip(i, data[i].name)}
-                    >
-                        {/* Face Side */}
-                        <Container style={[styles.card, styles.backFace]}>
-                            <Text>???????</Text>
-                        </Container>
-                        {/* Back Side */}
-                        <Container style={[styles.card, styles.frontFace]}>
-                            <Text>{data[i].name}</Text>
-                        </Container>
-                    </FlipCard>
+                        description={data[i].name}
+                        isFlipped={isFlipped[i]}
+                        isUnlocked={isUnlocked[i]}
+                        handleCardFlip={() => handleCardFlip(i, data[i].value)}
+                    />
                 </View>
             );
         }
@@ -173,7 +162,7 @@ function GameSession() {
         console.log('useEffect()');
         console.log('matchCompare array: ', matchCompare);
         // console.log('isUnlocked: ', isUnlocked);
-        // console.log('isFlipped: ', isFlipped);
+        console.log('isFlipped: ', isFlipped);
         if (matchCompare.length === 2) {
             console.log('now has 2');
             handleCardCompare();

@@ -45,8 +45,6 @@ const styles = StyleSheet.create({
 });
 
 function MainMenu(props) {
-    console.log('test', props.history);
-
     function intializeGame() {
         props.history.push('/GameSession')
     }

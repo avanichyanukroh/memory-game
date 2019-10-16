@@ -25,20 +25,23 @@ export default class animatedbasic extends Component {
     })
   }
   flipCard() {
-    if (this.value >= 90) {
-      Animated.spring(this.animatedValue,{
+      console.log('card status', this.props.isFlipped, this.props.isUnlocked);
+    if (this.props.isFlipped && this.props.isUnlocked) {
+      Animated.spring(this.animatedValue, {
         toValue: 0,
         friction: 8,
         tension: 10
       }).start();
-    } else {
-      Animated.spring(this.animatedValue,{
+      this.props.handleCardFlip();
+    }
+    
+    if (!this.props.isFlipped && this.props.isUnlocked) {
+      Animated.spring(this.animatedValue, {
         toValue: 180,
         friction: 8,
         tension: 10
       }).start();
     }
-
   }
   
   render() {
@@ -58,12 +61,12 @@ export default class animatedbasic extends Component {
             <View>
             <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
                 <Text style={styles.flipText}>
-                This text is flipping on the front.
+                    Memory!
                 </Text>
             </Animated.View>
             <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
                 <Text style={styles.flipText}>
-                This text is flipping on the back.
+                    {this.props.description}
                 </Text>
             </Animated.View>
             </View>
