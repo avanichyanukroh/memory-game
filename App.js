@@ -1,27 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { Provider } from 'react-redux';
 import { NativeRouter, Route } from 'react-router-native';
 import { StatusBar } from 'react-native';
-import * as Font from 'expo-font';
-
-
+import store from './redux/store';
 import MainMenu from './views/MainMenu';
 import GameSession from './views/GameSession';
 import Settings from './views/Settings';
 
 function App() {
-	Font.loadAsync({
-		Bangers: require('./assets/fonts/Bangers-Regular.ttf'),
-	});
-
     return (
-        <>
+        <Provider store={store}>
             <StatusBar hidden />
             <NativeRouter>
-                <Route exact path="/" component={GameSession} />
+                <Route exact path="/" component={MainMenu} />
                 <Route path="/GameSession" component={GameSession} />
                 <Route path="/Settings" component={Settings} />
             </NativeRouter>
-        </>
+        </Provider>
     );
 }
 

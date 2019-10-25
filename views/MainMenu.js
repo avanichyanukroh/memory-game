@@ -1,64 +1,116 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-native';
 
 import { StyleSheet, Image } from 'react-native';
 import { Container, Content, H1, H3, Button, Text } from 'native-base';
-import menuLogo from '../assets/images/brain-menu-logo.png';
+import { LinearGradient } from 'expo-linear-gradient';
+import menuLogo from '../assets/images/brand/logo.png';
+
+import * as Font from 'expo-font';
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#216583',
-        padding: 64
+        // backgroundColor: '#216583',
+        // padding: 64
     },
-    content:  {
-        // display: 'flex',
-        // justifyContent: 'flex-end'
+    linearGradientContainer: {
+        height: '100%',
+        width: '100%',
+        padding: 56
     },
     title: {
         textAlign: 'center',
-        color: 'white'
+        color: '#fbe555',
+        fontSize: 64,
+        lineHeight: 0,
+        marginBottom: 16,
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: {width: 5, height: 5},
+        textShadowRadius: 6
     },
     menuLogo: {
-        height: 250,
-        width: 250,
+        height: 180,
+        width: 180,
         resizeMode: 'contain',
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginTop: 48,
-        marginBottom: 48
+        marginTop: 0,
+        marginBottom: 36
     },
-    text: {
+    highScoreTitle: {
         textAlign: 'center',
         color: 'white',
-        marginBottom: 32
+        marginTop: 32,
+        marginBottom: 24
+    },
+    scoreText: {
+        textAlign: 'center',
+        color: 'white',
+        marginBottom: 16
     },
     button: {
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginBottom: 8
+        marginBottom: 16
     },
-    buttonText: {
+    playButton: {
+        marginTop: 32,
+        backgroundColor: '#ff0000'
+    },
+    themeButton: {
+        backgroundColor: '#fbe555'
+    },
+    playButtonText: {
         textAlign: 'center',
-        width: 250,
-        color: 'white'
+        width: '100%',
+        color: 'white',
+        fontSize: 32
+    },
+    themeButtonText: {
+        textAlign: 'center',
+        width: '100%',
+        color: 'black',
+        fontSize: 32
     }
 });
 
 function MainMenu(props) {
+    const [fontLoaded, setFontLoaded] = useState(false);
     function intializeGame() {
         props.history.push('/GameSession')
     }
-    
+
+    async function loadFont() {
+        await Font.loadAsync({
+            Bangers: require('../assets/fonts/Bangers-Regular.ttf'),
+        });
+    }
+
+    useEffect(() => {
+        loadFont().then(() =>setFontLoaded(true));
+    }, []);
+
     return (
         <Container style={styles.container}>
-            <Content style={styles.content}>
-                <H1 style={styles.title}>Memory Game</H1>
+            <LinearGradient
+                colors={['#216583', '#48A6CF']}
+                style={styles.linearGradientContainer}
+            >
                 <Image style={styles.menuLogo} source={menuLogo} />
-                <H3 style={styles.text}>
-                    Choose your difficulty!
-                </H3>
+                <H1 style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>FlashBack</H1>
                 
-                <Button style={styles.button} onPress={intializeGame}>
+                <H3 style={fontLoaded ? [styles.highScoreTitle, {fontFamily: 'Bangers'}] : null}>
+                    Highest Score
+                </H3>
+                <H3 style={fontLoaded ? [styles.scoreText, {fontFamily: 'Bangers'}] : null}>
+                    Fastest Time: 100
+                </H3>
+
+                {/* <H3 style={styles.text}>
+                    Choose your difficulty!
+                </H3> */}
+                
+                {/* <Button style={styles.button} onPress={intializeGame}>
                     <Text style={styles.buttonText}>Easy</Text>
                 </Button>
                 <Button style={styles.button} onPress={intializeGame}>
@@ -66,8 +118,14 @@ function MainMenu(props) {
                 </Button>
                 <Button style={styles.button} onPress={intializeGame}>
                     <Text style={styles.buttonText}>Hard</Text>
+                </Button> */}
+                <Button style={[styles.button, styles.playButton]} onPress={intializeGame}>
+                    <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play!</Text>
                 </Button>
-            </Content>
+                <Button style={[styles.button, styles.themeButton]} onPress={intializeGame}>
+                    <Text style={fontLoaded ? [styles.themeButtonText, {fontFamily: 'Bangers'}] : null}>Theme: Puppies</Text>
+                </Button>
+            </LinearGradient>
       </Container>
     );
 }

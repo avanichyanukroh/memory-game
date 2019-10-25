@@ -1,84 +1,145 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
-import { Col, Row, Grid } from 'react-native-easy-grid';
+import { Container } from 'native-base';
+import { Row, Grid } from 'react-native-easy-grid';
 import FlipCard from '../components/FlipCard';
+import {
+    setCardFlip0,
+    setCardFlip1,
+    setCardFlip2,
+    setCardFlip3,
+    setCardFlip4,
+    setCardFlip5,
+    setCardFlip6,
+    setCardFlip7,
+    setCardFlip8,
+    setCardFlip9,
+    setCardFlip10,
+    setCardFlip11,
+    setCardFlip12,
+    setCardFlip13,
+    setCardFlip14,
+    setCardFlip15,
+    incrTurnCount
+} from '../redux/actions';
+import GameLogicController from '../components/GameLogicController';
+import * as Font from 'expo-font';
+import GameHeader from '../components/GameHeader';
 
 const styles = StyleSheet.create({
-    header: {
-        backgroundColor: '#216583'
+    contentContainer: {
+        flex: 1,
+        alignItems:'center',
+        justifyContent:'space-evenly',
+        backgroundColor: '#454d66'
     },
-    title: {
-        color: 'white'
+    linearGradientContainer: {
+        height: '100%',
+        width: '100%'
     },
-    itemContainer: {
+    gridContainer: {
         marginLeft: 'auto',
         marginRight: 'auto'
     },
-    flipCardContainer: {
-        margin: 16
-    },
-    card: {
-        height: 120,
-        width: 80,
-        borderWidth: 0.5,
-        borderRadius: 4,
-        borderColor: 'black'
-    },
-    frontFace: {
-        backgroundColor: 'blue'
-    },
-    backFace: {
-        backgroundColor: 'red'
+    rowContainer: {
+        alignItems: 'center',
+        justifyContent:'flex-start',
+        // borderRadius: 4,
+        // borderWidth: 2,
+        // borderColor: 'green'
     }
   });
 
 function GameSession() {
+    const dispatch = useDispatch();
+    const gameLogicControllerRef = useRef();
+
+    const cardFlipActions = [
+        () => {
+            dispatch(setCardFlip0(true));
+            gameLogicControllerRef.current.addToMatchCompare(0, sampleData[0]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip1(true));
+            gameLogicControllerRef.current.addToMatchCompare(1, sampleData[1]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip2(true));
+            gameLogicControllerRef.current.addToMatchCompare(2, sampleData[2]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip3(true));
+            gameLogicControllerRef.current.addToMatchCompare(3, sampleData[3]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip4(true));
+            gameLogicControllerRef.current.addToMatchCompare(4, sampleData[4]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip5(true));
+            gameLogicControllerRef.current.addToMatchCompare(5, sampleData[5]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip6(true));
+            gameLogicControllerRef.current.addToMatchCompare(6, sampleData[6]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip7(true));
+            gameLogicControllerRef.current.addToMatchCompare(7, sampleData[7]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip8(true));
+            gameLogicControllerRef.current.addToMatchCompare(8, sampleData[8]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip9(true));
+            gameLogicControllerRef.current.addToMatchCompare(9, sampleData[9]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip10(true));
+            gameLogicControllerRef.current.addToMatchCompare(10, sampleData[10]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip11(true));
+            gameLogicControllerRef.current.addToMatchCompare(11, sampleData[11]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip12(true));
+            gameLogicControllerRef.current.addToMatchCompare(12, sampleData[12]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip13(true));
+            gameLogicControllerRef.current.addToMatchCompare(13, sampleData[13]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip14(true));
+            gameLogicControllerRef.current.addToMatchCompare(14, sampleData[14]);
+            dispatch(incrTurnCount());
+        },
+        () => {
+            dispatch(setCardFlip15(true));
+            gameLogicControllerRef.current.addToMatchCompare(15, sampleData[15]);
+            dispatch(incrTurnCount());
+        }
+    ]
 
     const [initalizeGame, setInitializeGame] = useState(false);
-    const [isFlipped, setFlipped] = useState(
-        {
-            0: false,
-            1: false,
-            2: false,
-            3: false,
-            4: false,
-            5: false,
-            6: false,
-            7: false,
-            8: false,
-            9: false,
-            10: false,
-            11: false,
-            12: false,
-            13: false,
-            14: false,
-            15: false
-        }
-    );
-    const [touchIsDisabled, setTouchIsDisabled] = useState(
-        {
-            0: false,
-            1: false,
-            2: false,
-            3: false,
-            4: false,
-            5: false,
-            6: false,
-            7: false,
-            8: false,
-            9: false,
-            10: false,
-            11: false,
-            12: false,
-            13: false,
-            14: false,
-            15: false
-        }
-    );
-    const [fullTouchDisabled, setFullTouchDisabled] = useState(false);
-    const [matchCompare, setMatchCompare] = useState([]);
 
     function shuffle(arr) {
         let i,
@@ -99,38 +160,6 @@ function GameSession() {
         return shuffle2;
     }
 
-    function handleCardFlip(index, value) {
-        if (touchIsDisabled[index] === false) {
-            console.log('handleCardFlip at', index, value);
-            setMatchCompare([...matchCompare, {index: index, value: value}]);
-            setFlipped((prevState) => {
-                return  { ...prevState, [index]: true }
-            });
-            setFullTouchDisabled(true);
-            // setTouchIsDisabled((prevState) => {
-            //     return  { ...prevState, [index]: true }
-            // });
-        }
-    }
-
-    function handleCardCompare() {
-            console.log('comparing values: ', matchCompare[0], matchCompare[1]);
-        if (matchCompare[0].value !== matchCompare[1].value) {
-            console.log('NOT EQUAL');
-            setFlipped((prevState) => {
-                return  { ...prevState, [matchCompare[0].index]: false, [matchCompare[1].index]: false }
-            });
-            // setTouchIsDisabled((prevState) => {
-            //     return  { ...prevState, [matchCompare[0].index]: false, [matchCompare[1].index]: false }
-            // });
-            setMatchCompare([]);
-        }
-        else {
-            console.log('EQUAL');
-            setMatchCompare([]);
-        }
-    }
-
     function renderGameGridRow(row) {
         if (initalizeGame === false) {
             randomizeData(sampleData);
@@ -146,71 +175,44 @@ function GameSession() {
                 <TouchableOpacity
                     key={i}
                     activeOpacity={1}
-                    onPress={() => handleCardFlip(i, data[i].name)}
-                    disabled={isFlipped[i] ? true : fullTouchDisabled}
+                    onPress={cardFlipActions[i]}
+                    // disabled={isFlipped[i] ? true : fullTouchDisabled}
                 >
-                    <View style={styles.itemContainer}>
                         <FlipCard
-                            isFlipped={isFlipped[i]}
-                            touchIsDisabled={touchIsDisabled[i]}
                             value={data[i].name}
+                            index={i}
                         />
-                    </View>
                 </TouchableOpacity>
             );
         }
         return gameGrid;
     }
 
-    useEffect(() => {
-        // console.log('useEffect()');
-        // console.log('matchCompare array: ', matchCompare);
-        // console.log('touchIsDisabled: ', touchIsDisabled);
-        
-        setTimeout(() => {
-            setFullTouchDisabled(false);
-          }, 1000);
-
-        if (matchCompare.length === 2) {
-            setTimeout(() => {
-                console.log('now has 2');
-                handleCardCompare();
-              }, 1000);
-
-        }
-    }, [matchCompare]);
-
     return (
         <Container>
-            {console.log('render()')}
-            {console.log('touchIsDisabled: ', touchIsDisabled)}
-            <Header style={styles.header}>
-                <Left>
-                    <Button transparent>
-                        <Icon name='menu' />
-                    </Button>
-                </Left>
-                <Body>
-                    <Title style={styles.title}>Header</Title>
-                </Body>
-                <Right />
-            </Header>
-            <Content>
-                <Grid>
-                    <Row>
-                        {renderGameGridRow(1)}
-                    </Row>
-                    <Row>
-                        {renderGameGridRow(2)}
-                    </Row>
-                    <Row>
-                        {renderGameGridRow(3)}
-                    </Row>
-                    <Row>
-                        {renderGameGridRow(4)}
-                    </Row>
-                </Grid>
-            </Content>
+            <GameLogicController ref={gameLogicControllerRef} />
+            <GameHeader />
+            <View style={styles.contentContainer}>
+                {/* <LinearGradient
+                                colors={['#900048', '#ff4057']}
+                                style={styles.linearGradientContainer}
+                > */}
+                    <Grid style={styles.gridContainer}>
+                        <Row style={styles.rowContainer}>
+                            {renderGameGridRow(1)}
+                        </Row>
+                        <Row style={styles.rowContainer}>
+                            {renderGameGridRow(2)}
+                        </Row>
+                        <Row style={styles.rowContainer}>
+                            {renderGameGridRow(3)}
+                        </Row>
+                        <Row style={styles.rowContainer}>
+                            {renderGameGridRow(4)}
+                        </Row>
+                    </Grid>
+                {/* </LinearGradient> */}
+            </View>
       </Container>
     );
 }
@@ -220,51 +222,67 @@ export default GameSession;
 // 4x4 match, 8 pairs
 const sampleData = [
     {
-        name: 'dog'
+        name: 'australianShepherd',
+        url: require('../assets/images/puppies/australian-shepherd.jpg')
     },
     {
-        name: 'dog'
+        name: 'australianShepherd',
+        url: require('../assets/images/puppies/australian-shepherd.jpg')
     },
     {
-        name: 'cat'
+        name: 'corgi',
+        url: require('../assets/images/puppies/corgi.jpg')
     },
     {
-        name: 'cat'
+        name: 'corgi',
+        url: require('../assets/images/puppies/corgi.jpg')
     },
     {
-        name: 'cow'
+        name: 'frenchie',
+        url: require('../assets/images/puppies/frenchie.jpg')
     },
     {
-        name: 'cow'
+        name: 'frenchie',
+        url: require('../assets/images/puppies/frenchie.jpg')
     },
     {
-        name: 'bird'
+        name: 'goldenRetriever',
+        url: require('../assets/images/puppies/golden-retriever.jpg')
     },
     {
-        name: 'bird'
+        name: 'goldenRetriever',
+        url: require('../assets/images/puppies/golden-retriever.jpg')
     },
     {
-        name: 'snake'
+        name: 'husky',
+        url: require('../assets/images/puppies/husky.jpg')
     },
     {
-        name: 'snake'
+        name: 'husky',
+        url: require('../assets/images/puppies/husky.jpg')
     },
     {
-        name: 'fish'
+        name: 'labrador',
+        url: require('../assets/images/puppies/labrador.jpg')
     },
     {
-        name: 'fish'
+        name: 'labrador',
+        url: require('../assets/images/puppies/labrador.jpg')
     },
     {
-        name: 'fox'
+        name: 'pug',
+        url: require('../assets/images/puppies/pug.jpg')
     },
     {
-        name: 'fox'
+        name: 'pug',
+        url: require('../assets/images/puppies/pug.jpg')
     },
     {
-        name: 'bear'
+        name: 'rottweiler',
+        url: require('../assets/images/puppies/rottweiler.jpg')
     },
     {
-        name: 'bear'
-    },
+        name: 'rottweiler',
+        url: require('../assets/images/puppies/rottweiler.jpg')
+    }
 ]
