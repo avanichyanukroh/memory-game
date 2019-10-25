@@ -12,7 +12,7 @@ function App() {
         <Provider store={store}>
             <StatusBar hidden />
             <NativeRouter>
-                <Route exact path="/" component={MainMenu} />
+                <Route exact path="/" component={GameSession} />
                 <Route path="/GameSession" component={GameSession} />
                 <Route path="/Settings" component={Settings} />
             </NativeRouter>

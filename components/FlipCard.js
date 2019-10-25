@@ -4,7 +4,8 @@ import {
   Text,
   View,
   Animated,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import logo from '../assets/images/brand/logo.png';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -69,6 +70,9 @@ class FlipCard extends Component {
         })
     }
 
+    handleCardOnPress() {
+    }
+
     handleFlipCard() {
         if (!this.props.isFlipped) {
             Animated.spring(this.animatedValue,{
@@ -121,14 +125,28 @@ class FlipCard extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.flipCardContainer}>
-                    <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
-                        <LinearGradient
-                            colors={['#216583', '#48A6CF']}
-                            style={styles.linearGradientContainer}
-                        >
-                            <Image style={styles.logo} source={logo} />
-                        </LinearGradient>
-                    </Animated.View>
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => {
+                            (!this.props.isFlipped && this.props.matchCompare.length !== 2) ? 
+                                this.props.cardFlipAction()
+                                :
+                                null
+                        }}
+                        style={{
+                            position: 'relative',
+                            zIndex: 10
+                        }}
+                    >
+                        <Animated.View style={[styles.flipCard, frontAnimatedStyle]}>
+                                <LinearGradient
+                                    colors={['#216583', '#48A6CF']}
+                                    style={styles.linearGradientContainer}
+                                >
+                                    <Image style={styles.logo} source={logo} />
+                                </LinearGradient>
+                        </Animated.View>
+                    </TouchableOpacity>
                     <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
                         <Image
                             style={{width: '100%', height: '100%'}}
@@ -137,6 +155,7 @@ class FlipCard extends Component {
                         />
                 </Animated.View>
               </View>
+              
             </View>
           );
     }
@@ -145,7 +164,8 @@ class FlipCard extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        isFlipped: state[`cardFlip${ownProps.index}`]
+        isFlipped: state[`cardFlip${ownProps.index}`],
+        matchCompare: state.matchCompare
     };
 }
     

@@ -172,17 +172,16 @@ function GameSession() {
 
         for (let i = startIndex; i <= endIndex; i++) {
             gameGrid.push(
-                <TouchableOpacity
+                <View
                     key={i}
-                    activeOpacity={1}
-                    onPress={cardFlipActions[i]}
-                    // disabled={isFlipped[i] ? true : fullTouchDisabled}
                 >
                         <FlipCard
+                            key={i}
                             value={data[i].name}
                             index={i}
+                            cardFlipAction={cardFlipActions[i]}
                         />
-                </TouchableOpacity>
+                </View>
             );
         }
         return gameGrid;

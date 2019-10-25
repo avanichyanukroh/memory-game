@@ -36,7 +36,7 @@ function GameHeader() {
             </Left>
             <Body>
                 <Title style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>
-                    Turn: {Math.floor(turnCount/2)}
+                    Turn: {Math.floor(turnCount / 2)}
                 </Title>
             </Body>
             <Right />
