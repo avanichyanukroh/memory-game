@@ -91,24 +91,8 @@ class FlipCard extends Component {
     }
 
     componentDidUpdate() {
-        console.log('FlipCard Render()');
         this.handleFlipCard();
     }
-        // else {
-        //     // console.log('flipCard() ELSE');
-        //     Animated.spring(animatedValue, {
-        //         toValue: 180,
-        //         friction: 8,
-        //         tension: 10
-        //     }).start();
-        // }
-    // useEffect(() => {
-    //     setCardInitialized(true);
-    // }, []);
-
-    // useEffect(() => {
-    //     flipCard();
-    // }, [isFlipped]);
 
     render() {
         const frontAnimatedStyle = {

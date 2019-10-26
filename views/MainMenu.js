@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
 
 function MainMenu(props) {
     const [fontLoaded, setFontLoaded] = useState(false);
-    function intializeGame() {
-        props.history.push('/GameSession')
+    function initializeGame() {
+        props.history.push('/GameSession');
     }
 
     async function loadFont() {
@@ -110,19 +110,19 @@ function MainMenu(props) {
                     Choose your difficulty!
                 </H3> */}
                 
-                {/* <Button style={styles.button} onPress={intializeGame}>
+                {/* <Button style={styles.button} onPress={initializeGame}>
                     <Text style={styles.buttonText}>Easy</Text>
                 </Button>
-                <Button style={styles.button} onPress={intializeGame}>
+                <Button style={styles.button} onPress={initializeGame}>
                     <Text style={styles.buttonText}>Medium</Text>
                 </Button>
-                <Button style={styles.button} onPress={intializeGame}>
+                <Button style={styles.button} onPress={initializeGame}>
                     <Text style={styles.buttonText}>Hard</Text>
                 </Button> */}
-                <Button style={[styles.button, styles.playButton]} onPress={intializeGame}>
+                <Button style={[styles.button, styles.playButton]} onPress={initializeGame}>
                     <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play!</Text>
                 </Button>
-                <Button style={[styles.button, styles.themeButton]} onPress={intializeGame}>
+                <Button style={[styles.button, styles.themeButton]} onPress={initializeGame}>
                     <Text style={fontLoaded ? [styles.themeButtonText, {fontFamily: 'Bangers'}] : null}>Theme: Puppies</Text>
                 </Button>
             </LinearGradient>

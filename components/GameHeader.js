@@ -6,7 +6,7 @@ import * as Font from 'expo-font';
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'black'
+        backgroundColor: '#000028'
     },
     title: {
         color: '#fbe555'

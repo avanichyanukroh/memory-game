@@ -104,3 +104,13 @@ export const INCR_TURN_COUNT = 'INCR_TURN_COUNT';
 export const incrTurnCount = () => ({
 	type: INCR_TURN_COUNT
 });
+
+export const INCR_MATCH_COUNT = 'INCR_MATCH_COUNT';
+export const incrMatchCount = () => ({
+	type: INCR_MATCH_COUNT
+});
+
+export const RESTART_GAME_SESSION = 'RESTART_GAME_SESSION';
+export const restartGameSession = () => ({
+	type: RESTART_GAME_SESSION
+});

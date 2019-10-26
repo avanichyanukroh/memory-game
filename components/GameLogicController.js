@@ -1,4 +1,6 @@
-import React, { useEffect, forwardRef, useImperativeHandle  } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle  } from 'react';
+import {StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
+import { Button } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -18,12 +20,78 @@ import {
     setCardFlip13,
     setCardFlip14,
     setCardFlip15,
-    setMatchCompare
+    setMatchCompare,
+    incrMatchCount
 } from '../redux/actions';
+
+import * as Font from 'expo-font';
+
+const styles = StyleSheet.create({
+    modalBackground: {
+        height: '100%',
+        width: '100%',
+        // backgroundColor: 'rgba(0, 0, 0, .2)',
+    },
+    modalContentContainer: {
+        textAlign: 'center',
+        backgroundColor: '#000028',
+        marginTop: '25%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        padding: 32,
+        height: '60%',
+        width: '70%',
+        borderRadius: 4
+    },
+    title: {
+        textAlign: 'center',
+        color: '#fbe555',
+        fontSize: 48,
+        lineHeight: 0,
+        marginBottom: 16,
+        // textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        // textShadowOffset: {width: 5, height: 5},
+        // textShadowRadius: 6
+    },
+    text: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 16,
+        lineHeight: 0,
+        marginBottom: 16,
+    },
+    button: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginBottom: 16
+    },
+    playButton: {
+        marginTop: 32,
+        backgroundColor: '#ff0000'
+    },
+    themeButton: {
+        backgroundColor: '#fbe555'
+    },
+    playButtonText: {
+        textAlign: 'center',
+        width: '100%',
+        color: 'white',
+        fontSize: 32
+    },
+    themeButtonText: {
+        textAlign: 'center',
+        width: '100%',
+        color: 'black',
+        fontSize: 32
+    }
+});
 
 const GameLogicController = React.memo(forwardRef((props, ref) => {
     const dispatch = useDispatch();
     const matchCompare = useSelector(store => store.matchCompare);
+    const matchCount = useSelector(store => store.matchCount);
+    const [fontLoaded, setFontLoaded] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const cardFlipActions = [
         () => dispatch(setCardFlip0(false)),
@@ -52,8 +120,10 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
     }))
     
     function handleMatchCompare() {
+        console.log('handleMatchCompare() ', matchCompare[0].value, '===', matchCompare[1].value);
         if (matchCompare[0].value === matchCompare[1].value) {
             dispatch(setMatchCompare([]));
+            dispatch(incrMatchCount());
         }
         else {
             cardFlipActions[matchCompare[0].index]();
@@ -63,7 +133,7 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
     }
 
     function handleConseal() {
-        console.log('handleCardReveal()');
+        console.log('handleConceal()');
         cardFlipActions[0]();
         cardFlipActions[1]();
         cardFlipActions[2]();
@@ -83,7 +153,7 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
     }
     
     function handleCardReveal() {
-        console.log('handleConseal()');
+        console.log('handleReveal()');
         dispatch(setCardFlip0(true));
         dispatch(setCardFlip1(true));
         dispatch(setCardFlip2(true));
@@ -102,14 +172,29 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
         dispatch(setCardFlip15(true));
     }
 
+    function restartGame() {
+
+        props.history.push('/GameSession');
+    }
+
+    async function loadFont() {
+        await Font.loadAsync({
+            Bangers: require('../assets/fonts/Bangers-Regular.ttf'),
+        });
+    }
+
+    useEffect(() => {
+        loadFont().then(() =>setFontLoaded(true));
+    }, []);
+
     useEffect(() => {
             setTimeout(() => {
                 handleCardReveal();
-              }, 2000);
+              }, 1500);
 
               setTimeout(() => {
                 handleConseal();
-              }, 5000);
+              }, 4500);
     }, []);
 
     useEffect(() => {
@@ -117,16 +202,54 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
             setTimeout(() => {
                 console.log('now has 2');
                 handleMatchCompare();
-              }, 1000);
+              }, 600);
         }
         // return () => {
         //     cleanup
         // };
     }, [matchCompare]);
 
+    useEffect(() => {
+        if (matchCount === 8) {
+            setModalOpen(true);
+        }
+    }, [matchCount]);
+
     return (
-        <>
-        </>
+        <View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalOpen}
+                // onRequestClose={() => {
+                // }}
+            >
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContentContainer}>
+                        <Text style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>Victory!</Text>
+                        <Text style={fontLoaded ? [styles.text, {fontFamily: 'Bangers'}] : null}>
+                            Highest Score
+                        </Text>
+                        <Text style={fontLoaded ? [styles.text, {fontFamily: 'Bangers'}] : null}>
+                            Fastest Time: 100
+                        </Text>
+                        <Button style={[styles.button, styles.playButton]} onPress={restartGame}>
+                            <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play Again!</Text>
+                        </Button>
+                        <Button style={[styles.button, styles.themeButton]} onPress={null}>
+                            <Text style={fontLoaded ? [styles.themeButtonText, {fontFamily: 'Bangers'}] : null}>Main Menu</Text>
+                        </Button>
+                        {/* <TouchableHighlight
+                            onPress={() => {
+                                
+                            }}
+                        >
+                            <Text>Hide Modal</Text>
+                        </TouchableHighlight> */}
+                    </View>
+                </View>
+            </Modal>
+        </View>
     );
 }))
 

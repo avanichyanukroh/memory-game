@@ -52,89 +52,89 @@ const styles = StyleSheet.create({
     }
   });
 
-function GameSession() {
+function GameSession(props) {
     const dispatch = useDispatch();
     const gameLogicControllerRef = useRef();
 
     const cardFlipActions = [
         () => {
             dispatch(setCardFlip0(true));
-            gameLogicControllerRef.current.addToMatchCompare(0, sampleData[0]);
+            gameLogicControllerRef.current.addToMatchCompare(0, sampleData[0].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip1(true));
-            gameLogicControllerRef.current.addToMatchCompare(1, sampleData[1]);
+            gameLogicControllerRef.current.addToMatchCompare(1, sampleData[1].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip2(true));
-            gameLogicControllerRef.current.addToMatchCompare(2, sampleData[2]);
+            gameLogicControllerRef.current.addToMatchCompare(2, sampleData[2].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip3(true));
-            gameLogicControllerRef.current.addToMatchCompare(3, sampleData[3]);
+            gameLogicControllerRef.current.addToMatchCompare(3, sampleData[3].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip4(true));
-            gameLogicControllerRef.current.addToMatchCompare(4, sampleData[4]);
+            gameLogicControllerRef.current.addToMatchCompare(4, sampleData[4].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip5(true));
-            gameLogicControllerRef.current.addToMatchCompare(5, sampleData[5]);
+            gameLogicControllerRef.current.addToMatchCompare(5, sampleData[5].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip6(true));
-            gameLogicControllerRef.current.addToMatchCompare(6, sampleData[6]);
+            gameLogicControllerRef.current.addToMatchCompare(6, sampleData[6].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip7(true));
-            gameLogicControllerRef.current.addToMatchCompare(7, sampleData[7]);
+            gameLogicControllerRef.current.addToMatchCompare(7, sampleData[7].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip8(true));
-            gameLogicControllerRef.current.addToMatchCompare(8, sampleData[8]);
+            gameLogicControllerRef.current.addToMatchCompare(8, sampleData[8].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip9(true));
-            gameLogicControllerRef.current.addToMatchCompare(9, sampleData[9]);
+            gameLogicControllerRef.current.addToMatchCompare(9, sampleData[9].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip10(true));
-            gameLogicControllerRef.current.addToMatchCompare(10, sampleData[10]);
+            gameLogicControllerRef.current.addToMatchCompare(10, sampleData[10].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip11(true));
-            gameLogicControllerRef.current.addToMatchCompare(11, sampleData[11]);
+            gameLogicControllerRef.current.addToMatchCompare(11, sampleData[11].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip12(true));
-            gameLogicControllerRef.current.addToMatchCompare(12, sampleData[12]);
+            gameLogicControllerRef.current.addToMatchCompare(12, sampleData[12].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip13(true));
-            gameLogicControllerRef.current.addToMatchCompare(13, sampleData[13]);
+            gameLogicControllerRef.current.addToMatchCompare(13, sampleData[13].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip14(true));
-            gameLogicControllerRef.current.addToMatchCompare(14, sampleData[14]);
+            gameLogicControllerRef.current.addToMatchCompare(14, sampleData[14].name);
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip15(true));
-            gameLogicControllerRef.current.addToMatchCompare(15, sampleData[15]);
+            gameLogicControllerRef.current.addToMatchCompare(15, sampleData[15].name);
             dispatch(incrTurnCount());
         }
     ]
