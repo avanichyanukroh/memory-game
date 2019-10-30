@@ -100,6 +100,12 @@ export const setInitializeGame = (initializeGame) => ({
 	initializeGame
 });
 
+export const SET_CARD_SHUFFLE = 'SET_CARD_SHUFFLE';
+export const setCardShuffle = (cardShuffle) => ({
+	type: SET_CARD_SHUFFLE,
+	cardShuffle
+});
+
 export const SET_MATCH_COMPARE = 'SET_MATCH_COMPARE';
 export const setMatchCompare = (value) => ({
 	type: SET_MATCH_COMPARE,

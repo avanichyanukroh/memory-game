@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -23,7 +23,9 @@ import {
     setCardFlip14,
     setCardFlip15,
     setInitializeGame,
-    incrTurnCount
+    setCardShuffle,
+    incrTurnCount,
+    setMatchCompare
 } from '../redux/actions';
 import GameLogicController from '../components/GameLogicController';
 import * as Font from 'expo-font';
@@ -55,89 +57,89 @@ const styles = StyleSheet.create({
 
 function GameSession(props) {
     const dispatch = useDispatch();
-    const gameLogicControllerRef = useRef();
 
-    const initializeGame = useSelector(store => store.initializeGame);
+    const cardShuffle = useSelector(store => store.cardShuffle);
+    const matchCompare = useSelector(store => store.matchCompare);
 
     const cardFlipActions = [
         () => {
             dispatch(setCardFlip0(true));
-            gameLogicControllerRef.current.addToMatchCompare(0, sampleData[0].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 0, value: sampleData[0].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip1(true));
-            gameLogicControllerRef.current.addToMatchCompare(1, sampleData[1].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 1, value: sampleData[1].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip2(true));
-            gameLogicControllerRef.current.addToMatchCompare(2, sampleData[2].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 2, value: sampleData[2].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip3(true));
-            gameLogicControllerRef.current.addToMatchCompare(3, sampleData[3].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 3, value: sampleData[3].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip4(true));
-            gameLogicControllerRef.current.addToMatchCompare(4, sampleData[4].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 4, value: sampleData[4].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip5(true));
-            gameLogicControllerRef.current.addToMatchCompare(5, sampleData[5].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 5, value: sampleData[5].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip6(true));
-            gameLogicControllerRef.current.addToMatchCompare(6, sampleData[6].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 6, value: sampleData[6].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip7(true));
-            gameLogicControllerRef.current.addToMatchCompare(7, sampleData[7].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 7, value: sampleData[7].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip8(true));
-            gameLogicControllerRef.current.addToMatchCompare(8, sampleData[8].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 8, value: sampleData[8].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip9(true));
-            gameLogicControllerRef.current.addToMatchCompare(9, sampleData[9].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 9, value: sampleData[9].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip10(true));
-            gameLogicControllerRef.current.addToMatchCompare(10, sampleData[10].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 10, value: sampleData[10].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip11(true));
-            gameLogicControllerRef.current.addToMatchCompare(11, sampleData[11].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 11, value: sampleData[11].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip12(true));
-            gameLogicControllerRef.current.addToMatchCompare(12, sampleData[12].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 12, value: sampleData[12].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip13(true));
-            gameLogicControllerRef.current.addToMatchCompare(13, sampleData[13].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 13, value: sampleData[13].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip14(true));
-            gameLogicControllerRef.current.addToMatchCompare(14, sampleData[14].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 14, value: sampleData[14].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip15(true));
-            gameLogicControllerRef.current.addToMatchCompare(15, sampleData[15].name);
+            dispatch(setMatchCompare([...matchCompare, {index: 15, value: sampleData[15].name}]));
             dispatch(incrTurnCount());
         }
     ]
@@ -162,10 +164,9 @@ function GameSession(props) {
     }
 
     function renderGameGridRow(row) {
-        console.log('renderGameGrid intitial Game', initializeGame);
-        if (initializeGame === false) {
+        if (!cardShuffle) {
             randomizeData(sampleData);
-            dispatch(setInitializeGame(true));
+            dispatch(setCardShuffle(true));
         }
 
         let data = sampleData;
@@ -192,7 +193,7 @@ function GameSession(props) {
 
     return (
         <Container>
-            <GameLogicController setInitializeGame={setInitializeGame} history={props.history} ref={gameLogicControllerRef} />
+            <GameLogicController setInitializeGame={setInitializeGame} history={props.history} />
             <GameHeader />
             <View style={styles.contentContainer}>
                 {/* <LinearGradient

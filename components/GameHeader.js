@@ -8,6 +8,12 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#000028'
     },
+    gridWrapper: {
+        width: '70%'
+    },
+    rowContainer: {
+        justifyContent: 'space-evenly'
+    },
     title: {
         color: '#fbe555',
         alignSelf: 'center',
@@ -29,7 +35,7 @@ function GameHeader() {
     }
 
     useEffect(() => {
-        loadFont().then(() =>setFontLoaded(true));
+        loadFont().then(() => setFontLoaded(true));
     }, []);
 
     return (
@@ -39,9 +45,9 @@ function GameHeader() {
                     <Icon name='menu' />
                 </Button>
             </Left>
-            <View style={{borderRadius: 1, borderColor: 'green', borderWidth: 1, width: '70%'}}>
+            <View style={styles.gridWrapper}>
                 <Grid>
-                    <Row style={{justifyContent: 'space-evenly', borderRadius: 1, borderColor: 'red', borderWidth: 1}}>
+                    <Row style={styles.rowContainer}>
                         <Title style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>
                             Turn: {Math.floor(turnCount / 2)}
                         </Title>

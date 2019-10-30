@@ -23,7 +23,8 @@ import {
     setMatchCompare,
     incrMatchCount,
     incrTimer,
-    restartGameSession
+    restartGameSession,
+    setInitializeGame
 } from '../redux/actions';
 
 import * as Font from 'expo-font';
@@ -88,13 +89,14 @@ const styles = StyleSheet.create({
     }
 });
 
-const GameLogicController = React.memo(forwardRef((props, ref) => {
+function GameLogicController(props) {
     const dispatch = useDispatch();
     let handleTimer = useRef(null);
 
     const matchCompare = useSelector(store => store.matchCompare);
     const matchCount = useSelector(store => store.matchCount);
     const initializeGame = useSelector(store => store.initializeGame);
+    const cardShuffle = useSelector(store => store.cardShuffle);
 
     const [fontLoaded, setFontLoaded] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
@@ -117,13 +119,6 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
         () => dispatch(setCardFlip14(false)),
         () => dispatch(setCardFlip15(false))
     ]
-
-    useImperativeHandle(ref, (index, value) => ({
-        addToMatchCompare(index, value) {
-            dispatch(setMatchCompare([...matchCompare, {index: index, value: value}]))
-        }
-        
-    }))
     
     function handleMatchCompare() {
         console.log('handleMatchCompare() ', matchCompare[0].value, '===', matchCompare[1].value);
@@ -198,8 +193,8 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
     }, []);
 
     useEffect(() => {
-        console.log('initializeGame', initializeGame);
-        if (initializeGame) {
+        console.log('intializeGame: ',initializeGame);
+        if (!initializeGame && cardShuffle) {
             console.log('SET TIME OUT RUN');
             setTimeout(() => {
                 handleCardReveal();
@@ -207,11 +202,13 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
 
               setTimeout(() => {
                 handleConseal();
+                dispatch(setInitializeGame(true));
               }, 4500);
         }
-    }, [initializeGame]);
+    }, [initializeGame, cardShuffle]);
 
     useEffect(() => {
+        console.log('MATCH COMPARE: ', matchCompare);
         if (matchCompare.length === 2) {
             setTimeout(() => {
                 handleMatchCompare();
@@ -272,6 +269,6 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
             </Modal>
         </View>
     );
-}))
+}
 
 export default GameLogicController;

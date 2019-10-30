@@ -16,6 +16,7 @@ import {
     SET_CARD_FLIP_14,
     SET_CARD_FLIP_15,
     SET_INITIALIZE_GAME,
+    SET_CARD_SHUFFLE,
     SET_MATCH_COMPARE,
     INCR_TURN_COUNT,
     INCR_MATCH_COUNT,
@@ -41,6 +42,7 @@ const initialState = {
     cardFlip14: false,
     cardFlip15: false,
     initializeGame: false,
+    cardShuffle: false,
     matchCompare: [],
     turnCount: 0,
     timer: 0,
@@ -148,6 +150,12 @@ export const reducers = (state = initialState, action) => {
     if (action.type === SET_INITIALIZE_GAME) {
 		return Object.assign({}, state, {
 			initializeGame: action.initializeGame
+        });
+    }
+
+    if (action.type === SET_CARD_SHUFFLE) {
+		return Object.assign({}, state, {
+			cardShuffle: action.cardShuffle
         });
     }
 
