@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
 
 function MainMenu(props) {
     const [fontLoaded, setFontLoaded] = useState(false);
+
     function initializeGame() {
         props.history.push('/GameSession');
     }
@@ -105,20 +106,6 @@ function MainMenu(props) {
                 <H3 style={fontLoaded ? [styles.scoreText, {fontFamily: 'Bangers'}] : null}>
                     Fastest Time: 100
                 </H3>
-
-                {/* <H3 style={styles.text}>
-                    Choose your difficulty!
-                </H3> */}
-                
-                {/* <Button style={styles.button} onPress={initializeGame}>
-                    <Text style={styles.buttonText}>Easy</Text>
-                </Button>
-                <Button style={styles.button} onPress={initializeGame}>
-                    <Text style={styles.buttonText}>Medium</Text>
-                </Button>
-                <Button style={styles.button} onPress={initializeGame}>
-                    <Text style={styles.buttonText}>Hard</Text>
-                </Button> */}
                 <Button style={[styles.button, styles.playButton]} onPress={initializeGame}>
                     <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play!</Text>
                 </Button>

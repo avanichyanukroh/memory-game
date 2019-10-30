@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Container } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
@@ -22,6 +22,7 @@ import {
     setCardFlip13,
     setCardFlip14,
     setCardFlip15,
+    setInitializeGame,
     incrTurnCount
 } from '../redux/actions';
 import GameLogicController from '../components/GameLogicController';
@@ -55,6 +56,8 @@ const styles = StyleSheet.create({
 function GameSession(props) {
     const dispatch = useDispatch();
     const gameLogicControllerRef = useRef();
+
+    const initializeGame = useSelector(store => store.initializeGame);
 
     const cardFlipActions = [
         () => {
@@ -139,8 +142,6 @@ function GameSession(props) {
         }
     ]
 
-    const [initalizeGame, setInitializeGame] = useState(false);
-
     function shuffle(arr) {
         let i,
             j,
@@ -161,10 +162,12 @@ function GameSession(props) {
     }
 
     function renderGameGridRow(row) {
-        if (initalizeGame === false) {
+        console.log('renderGameGrid intitial Game', initializeGame);
+        if (initializeGame === false) {
             randomizeData(sampleData);
-            setInitializeGame(true);
+            dispatch(setInitializeGame(true));
         }
+
         let data = sampleData;
         let startIndex = (row - 1) * 4;
         let endIndex = (row - 1) * 4 + 3;
@@ -189,7 +192,7 @@ function GameSession(props) {
 
     return (
         <Container>
-            <GameLogicController ref={gameLogicControllerRef} />
+            <GameLogicController setInitializeGame={setInitializeGame} history={props.history} ref={gameLogicControllerRef} />
             <GameHeader />
             <View style={styles.contentContainer}>
                 {/* <LinearGradient

@@ -94,6 +94,12 @@ export const setCardFlip15 = (cardFlip15) => ({
 	cardFlip15
 });
 
+export const SET_INITIALIZE_GAME = 'SET_INITIALIZE_GAME';
+export const setInitializeGame = (initializeGame) => ({
+	type: SET_INITIALIZE_GAME,
+	initializeGame
+});
+
 export const SET_MATCH_COMPARE = 'SET_MATCH_COMPARE';
 export const setMatchCompare = (value) => ({
 	type: SET_MATCH_COMPARE,
@@ -108,6 +114,11 @@ export const incrTurnCount = () => ({
 export const INCR_MATCH_COUNT = 'INCR_MATCH_COUNT';
 export const incrMatchCount = () => ({
 	type: INCR_MATCH_COUNT
+});
+
+export const INCR_TIMER = 'INCR_TIMER';
+export const incrTimer = () => ({
+	type: INCR_TIMER
 });
 
 export const RESTART_GAME_SESSION = 'RESTART_GAME_SESSION';

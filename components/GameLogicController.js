@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle  } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef  } from 'react';
 import {StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
 import { Button } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,9 @@ import {
     setCardFlip14,
     setCardFlip15,
     setMatchCompare,
-    incrMatchCount
+    incrMatchCount,
+    incrTimer,
+    restartGameSession
 } from '../redux/actions';
 
 import * as Font from 'expo-font';
@@ -88,8 +90,12 @@ const styles = StyleSheet.create({
 
 const GameLogicController = React.memo(forwardRef((props, ref) => {
     const dispatch = useDispatch();
+    let handleTimer = useRef(null);
+
     const matchCompare = useSelector(store => store.matchCompare);
     const matchCount = useSelector(store => store.matchCount);
+    const initializeGame = useSelector(store => store.initializeGame);
+
     const [fontLoaded, setFontLoaded] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -173,8 +179,12 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
     }
 
     function restartGame() {
+        dispatch(restartGameSession());
+        // props.history.push('/GameSession');
+    }
 
-        props.history.push('/GameSession');
+    function redirectMainMenu() {
+        props.history.push('/');
     }
 
     async function loadFont() {
@@ -188,6 +198,9 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
     }, []);
 
     useEffect(() => {
+        console.log('initializeGame', initializeGame);
+        if (initializeGame) {
+            console.log('SET TIME OUT RUN');
             setTimeout(() => {
                 handleCardReveal();
               }, 1500);
@@ -195,25 +208,33 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
               setTimeout(() => {
                 handleConseal();
               }, 4500);
-    }, []);
+        }
+    }, [initializeGame]);
 
     useEffect(() => {
         if (matchCompare.length === 2) {
             setTimeout(() => {
-                console.log('now has 2');
                 handleMatchCompare();
               }, 600);
         }
-        // return () => {
-        //     cleanup
-        // };
     }, [matchCompare]);
 
     useEffect(() => {
-        if (matchCount === 8) {
+        if (matchCount === 1) {
+            clearInterval(handleTimer.current);
             setModalOpen(true);
         }
+        if (matchCompare !== 8 && modalOpen) {
+            setModalOpen(false);
+        }
     }, [matchCount]);
+
+    useEffect(() => {
+        if (initializeGame) {
+            handleTimer.current = setInterval(() => dispatch(incrTimer()), 1000);
+        }
+
+    }, [initializeGame]);
 
     return (
         <View>
@@ -236,7 +257,7 @@ const GameLogicController = React.memo(forwardRef((props, ref) => {
                         <Button style={[styles.button, styles.playButton]} onPress={restartGame}>
                             <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play Again!</Text>
                         </Button>
-                        <Button style={[styles.button, styles.themeButton]} onPress={null}>
+                        <Button style={[styles.button, styles.themeButton]} onPress={redirectMainMenu}>
                             <Text style={fontLoaded ? [styles.themeButtonText, {fontFamily: 'Bangers'}] : null}>Main Menu</Text>
                         </Button>
                         {/* <TouchableHighlight

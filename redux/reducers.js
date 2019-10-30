@@ -15,9 +15,11 @@ import {
     SET_CARD_FLIP_13,
     SET_CARD_FLIP_14,
     SET_CARD_FLIP_15,
+    SET_INITIALIZE_GAME,
     SET_MATCH_COMPARE,
     INCR_TURN_COUNT,
     INCR_MATCH_COUNT,
+    INCR_TIMER,
     RESTART_GAME_SESSION
 } from './actions';
 
@@ -38,8 +40,10 @@ const initialState = {
     cardFlip13: false,
     cardFlip14: false,
     cardFlip15: false,
+    initializeGame: false,
     matchCompare: [],
     turnCount: 0,
+    timer: 0,
     matchCount: 0
 }
 
@@ -141,6 +145,12 @@ export const reducers = (state = initialState, action) => {
         });
     }
 
+    if (action.type === SET_INITIALIZE_GAME) {
+		return Object.assign({}, state, {
+			initializeGame: action.initializeGame
+        });
+    }
+
     if (action.type === SET_MATCH_COMPARE) {
 		return Object.assign({}, state, {
 			matchCompare: action.value
@@ -150,6 +160,12 @@ export const reducers = (state = initialState, action) => {
     if (action.type === INCR_TURN_COUNT) {
 		return Object.assign({}, state, {
 			turnCount: state.turnCount + 1
+        });
+    }
+
+    if (action.type === INCR_TIMER) {
+		return Object.assign({}, state, {
+			timer: state.timer + 1
         });
     }
 
@@ -177,9 +193,11 @@ export const reducers = (state = initialState, action) => {
             cardFlip13: false,
             cardFlip14: false,
             cardFlip15: false,
+            initializeGame: false,
             matchCompare: [],
             turnCount: 0,
-            matchCount: 0
+            matchCount: 0,
+            timer: 0
         });
     }
     
