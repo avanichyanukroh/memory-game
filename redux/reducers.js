@@ -202,6 +202,7 @@ export const reducers = (state = initialState, action) => {
             cardFlip14: false,
             cardFlip15: false,
             initializeGame: false,
+            cardShuffle: false,
             matchCompare: [],
             turnCount: 0,
             matchCount: 0,

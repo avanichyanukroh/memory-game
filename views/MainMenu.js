@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-native';
 
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import { Container, Content, H1, H3, Button, Text } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import menuLogo from '../assets/images/brand/logo.png';
@@ -100,12 +100,17 @@ function MainMenu(props) {
                 <Image style={styles.menuLogo} source={menuLogo} />
                 <H1 style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>FlashBack</H1>
                 
+                {
+
+                }
+                <View>
                 <H3 style={fontLoaded ? [styles.highScoreTitle, {fontFamily: 'Bangers'}] : null}>
                     Highest Score
                 </H3>
                 <H3 style={fontLoaded ? [styles.scoreText, {fontFamily: 'Bangers'}] : null}>
                     Fastest Time: 100
                 </H3>
+                </View>
                 <Button style={[styles.button, styles.playButton]} onPress={initializeGame}>
                     <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play!</Text>
                 </Button>

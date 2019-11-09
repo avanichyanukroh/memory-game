@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import {  Header, Title, Button, Left, Right, Body, Grid, Row, Icon, View } from 'native-base';
+import {  Header, Title, Button, Left, Right, Body, Grid, Row, Icon, View, Text } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Font from 'expo-font';
+import { restartGameSession } from '../redux/actions';
+
 
 const styles = StyleSheet.create({
     header: {
@@ -20,14 +22,27 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
         paddingRight: 8,
         fontSize: 24
+    },
+    arrowIcon: {
+        color: '#ff0000'
+    },
+    linkText: {
+        color: '#ff0000'
     }
   });
 
-function GameHeader() {
+function GameHeader(props) {
+    const dispatch = useDispatch();
+
     const turnCount = useSelector(store => store.turnCount);
     const timer = useSelector(store => store.timer);
     const [fontLoaded, setFontLoaded] = useState(false);
 
+    function redirectMainMenu() {
+        props.history.push('/');
+        dispatch(restartGameSession());
+    }
+    
     async function loadFont() {
         await Font.loadAsync({
             Bangers: require('../assets/fonts/Bangers-Regular.ttf'),
@@ -40,11 +55,12 @@ function GameHeader() {
 
     return (
         <Header style={styles.header}>
-            <Left>
-                <Button transparent>
-                    <Icon name='menu' />
+            {/* <Left> */}
+                <Button iconLeft light transparent onPress={redirectMainMenu}>
+                    <Icon style={styles.arrowIcon} name='arrow-back' />
+                    <Text style={fontLoaded ? [styles.linkText, {fontFamily: 'Bangers'}] : null}>Exit</Text>
                 </Button>
-            </Left>
+            {/* </Left> */}
             <View style={styles.gridWrapper}>
                 <Grid>
                     <Row style={styles.rowContainer}>

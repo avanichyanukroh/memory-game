@@ -1,6 +1,5 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef  } from 'react';
-import {StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
-import { Button } from 'native-base';
+import React, { useState, useEffect  } from 'react';
+import {StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -22,84 +21,19 @@ import {
     setCardFlip15,
     setMatchCompare,
     incrMatchCount,
-    incrTimer,
-    restartGameSession,
     setInitializeGame
 } from '../redux/actions';
 
-import * as Font from 'expo-font';
-
 const styles = StyleSheet.create({
-    modalBackground: {
-        height: '100%',
-        width: '100%',
-        // backgroundColor: 'rgba(0, 0, 0, .2)',
-    },
-    modalContentContainer: {
-        textAlign: 'center',
-        backgroundColor: '#000028',
-        marginTop: '25%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        padding: 32,
-        height: '60%',
-        width: '70%',
-        borderRadius: 4
-    },
-    title: {
-        textAlign: 'center',
-        color: '#fbe555',
-        fontSize: 48,
-        lineHeight: 0,
-        marginBottom: 16,
-        // textShadowColor: 'rgba(0, 0, 0, 0.75)',
-        // textShadowOffset: {width: 5, height: 5},
-        // textShadowRadius: 6
-    },
-    text: {
-        textAlign: 'center',
-        color: 'white',
-        fontSize: 16,
-        lineHeight: 0,
-        marginBottom: 16,
-    },
-    button: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        marginBottom: 16
-    },
-    playButton: {
-        marginTop: 32,
-        backgroundColor: '#ff0000'
-    },
-    themeButton: {
-        backgroundColor: '#fbe555'
-    },
-    playButtonText: {
-        textAlign: 'center',
-        width: '100%',
-        color: 'white',
-        fontSize: 32
-    },
-    themeButtonText: {
-        textAlign: 'center',
-        width: '100%',
-        color: 'black',
-        fontSize: 32
-    }
+
 });
 
 function GameLogicController(props) {
     const dispatch = useDispatch();
-    let handleTimer = useRef(null);
 
     const matchCompare = useSelector(store => store.matchCompare);
-    const matchCount = useSelector(store => store.matchCount);
     const initializeGame = useSelector(store => store.initializeGame);
     const cardShuffle = useSelector(store => store.cardShuffle);
-
-    const [fontLoaded, setFontLoaded] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
 
     const cardFlipActions = [
         () => dispatch(setCardFlip0(false)),
@@ -173,25 +107,6 @@ function GameLogicController(props) {
         dispatch(setCardFlip15(true));
     }
 
-    function restartGame() {
-        dispatch(restartGameSession());
-        // props.history.push('/GameSession');
-    }
-
-    function redirectMainMenu() {
-        props.history.push('/');
-    }
-
-    async function loadFont() {
-        await Font.loadAsync({
-            Bangers: require('../assets/fonts/Bangers-Regular.ttf'),
-        });
-    }
-
-    useEffect(() => {
-        loadFont().then(() =>setFontLoaded(true));
-    }, []);
-
     useEffect(() => {
         console.log('intializeGame: ',initializeGame);
         if (!initializeGame && cardShuffle) {
@@ -216,58 +131,9 @@ function GameLogicController(props) {
         }
     }, [matchCompare]);
 
-    useEffect(() => {
-        if (matchCount === 1) {
-            clearInterval(handleTimer.current);
-            setModalOpen(true);
-        }
-        if (matchCompare !== 8 && modalOpen) {
-            setModalOpen(false);
-        }
-    }, [matchCount]);
-
-    useEffect(() => {
-        if (initializeGame) {
-            handleTimer.current = setInterval(() => dispatch(incrTimer()), 1000);
-        }
-
-    }, [initializeGame]);
-
     return (
-        <View>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalOpen}
-                // onRequestClose={() => {
-                // }}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.modalContentContainer}>
-                        <Text style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>Victory!</Text>
-                        <Text style={fontLoaded ? [styles.text, {fontFamily: 'Bangers'}] : null}>
-                            Highest Score
-                        </Text>
-                        <Text style={fontLoaded ? [styles.text, {fontFamily: 'Bangers'}] : null}>
-                            Fastest Time: 100
-                        </Text>
-                        <Button style={[styles.button, styles.playButton]} onPress={restartGame}>
-                            <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play Again!</Text>
-                        </Button>
-                        <Button style={[styles.button, styles.themeButton]} onPress={redirectMainMenu}>
-                            <Text style={fontLoaded ? [styles.themeButtonText, {fontFamily: 'Bangers'}] : null}>Main Menu</Text>
-                        </Button>
-                        {/* <TouchableHighlight
-                            onPress={() => {
-                                
-                            }}
-                        >
-                            <Text>Hide Modal</Text>
-                        </TouchableHighlight> */}
-                    </View>
-                </View>
-            </Modal>
-        </View>
+        <>
+        </>
     );
 }
 

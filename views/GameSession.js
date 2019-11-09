@@ -27,9 +27,12 @@ import {
     incrTurnCount,
     setMatchCompare
 } from '../redux/actions';
+
 import GameLogicController from '../components/GameLogicController';
-import * as Font from 'expo-font';
+import GameResultsModal from '../components/GameResultsModal';
 import GameHeader from '../components/GameHeader';
+
+import * as Font from 'expo-font';
 
 const styles = StyleSheet.create({
     contentContainer: {
@@ -194,7 +197,8 @@ function GameSession(props) {
     return (
         <Container>
             <GameLogicController setInitializeGame={setInitializeGame} history={props.history} />
-            <GameHeader />
+            <GameResultsModal history={props.history} />
+            <GameHeader history={props.history} />
             <View style={styles.contentContainer}>
                 {/* <LinearGradient
                                 colors={['#900048', '#ff4057']}
