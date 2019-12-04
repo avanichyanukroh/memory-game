@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import menuLogo from '../assets/images/brand/logo.png';
 
 import { getHighScore } from '../redux/APIActions';
-import { setCardTheme } from '../redux/actions';
+import { setCardTheme, setError } from '../redux/actions';
 
 import * as Font from 'expo-font';
 import Picker from '../components/Picker';
@@ -114,6 +114,7 @@ function MainMenu(props) {
 
     function handleCloseModal() {
         setModalOpen(false);
+        dispatch(setError(null));
     }
 
     function renderHighScore() {

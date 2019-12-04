@@ -155,3 +155,15 @@ export const setHighScore = (highScore) => ({
     type: SET_HIGH_SCORE,
     highScore
 });
+
+export const SET_LOADING = 'SET_LOADING';
+export const setLoading = (component) => ({
+    type: SET_LOADING,
+    component
+});
+
+export const SET_ERROR = 'SET_ERROR';
+export const setError = (component) => ({
+    type: SET_ERROR,
+    component
+});

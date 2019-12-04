@@ -25,7 +25,9 @@ import {
     SET_CARD_THEME,
     SET_USER,
     SET_LEADER_BOARD,
-    SET_HIGH_SCORE
+    SET_HIGH_SCORE,
+    SET_LOADING,
+    SET_ERROR
 } from './actions';
 
 const initialState = {
@@ -54,7 +56,9 @@ const initialState = {
     cardTheme: 'Puppies',
     user: null,
     leaderBoard: null,
-    highScore: null
+    highScore: null,
+    loading: null,
+    error: null
 }
 
 
@@ -226,19 +230,39 @@ export const reducers = (state = initialState, action) => {
 
     if (action.type === SET_USER) {
 		return Object.assign({}, state, {
-			user: action.user
+            user: action.user,
+            loading: null,
+            error: null
         });
     }
 
     if (action.type === SET_LEADER_BOARD) {
 		return Object.assign({}, state, {
-			leaderBoard: action.leaderBoard
+            leaderBoard: action.leaderBoard,
+            loading: null,
+            error: null
         });
     }
 
     if (action.type === SET_HIGH_SCORE) {
 		return Object.assign({}, state, {
-			highScore: action.highScore
+            highScore: action.highScore,
+            loading: null,
+            error: null
+        });
+    }
+
+    if (action.type === SET_LOADING) {
+		return Object.assign({}, state, {
+            loading: action.component,
+            error: null
+        });
+    }
+
+    if (action.type === SET_ERROR) {
+		return Object.assign({}, state, {
+            error: action.component,
+            loading: null
         });
     }
 

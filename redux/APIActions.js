@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { setUser, setLeaderBoard, setHighScore } from './actions';
+import { setUser, setLeaderBoard, setHighScore, setLoading, setError } from './actions';
 
 export const loginUser = (username, pin) => dispatch => {
+    dispatch(setLoading('login'));
     axios({
         method: 'post',
         url: 'https://flashback-api.herokuapp.com/api/user/login',
@@ -14,6 +15,7 @@ export const loginUser = (username, pin) => dispatch => {
         dispatch(setUser(res.data));
     })
     .catch(err => {
+        dispatch(setError('login'));
         console.log(err);
     });
 }
