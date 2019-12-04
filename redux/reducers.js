@@ -21,7 +21,11 @@ import {
     INCR_TURN_COUNT,
     INCR_MATCH_COUNT,
     INCR_TIMER,
-    RESTART_GAME_SESSION
+    RESTART_GAME_SESSION,
+    SET_CARD_THEME,
+    SET_USER,
+    SET_LEADER_BOARD,
+    SET_HIGH_SCORE
 } from './actions';
 
 const initialState = {
@@ -46,7 +50,11 @@ const initialState = {
     matchCompare: [],
     turnCount: 0,
     timer: 0,
-    matchCount: 0
+    matchCount: 0,
+    cardTheme: 'Puppies',
+    user: null,
+    leaderBoard: null,
+    highScore: null
 }
 
 
@@ -209,6 +217,30 @@ export const reducers = (state = initialState, action) => {
             timer: 0
         });
     }
-    
+
+    if (action.type === SET_CARD_THEME) {
+		return Object.assign({}, state, {
+			cardTheme: action.cardTheme
+        });
+    }
+
+    if (action.type === SET_USER) {
+		return Object.assign({}, state, {
+			user: action.user
+        });
+    }
+
+    if (action.type === SET_LEADER_BOARD) {
+		return Object.assign({}, state, {
+			leaderBoard: action.leaderBoard
+        });
+    }
+
+    if (action.type === SET_HIGH_SCORE) {
+		return Object.assign({}, state, {
+			highScore: action.highScore
+        });
+    }
+
 	return state;
 };

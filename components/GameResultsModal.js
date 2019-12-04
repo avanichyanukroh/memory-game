@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef  } from 'react';
 import {StyleSheet, Modal, Text } from 'react-native';
-import {  Header, Title, Button, Left, Right, Body, Grid, Row, Icon, View } from 'native-base';
+import { Button, Grid, Row, View } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { updateHighScore } from '../redux/APIActions';
 import {
     incrTimer,
     restartGameSession
@@ -87,10 +88,12 @@ function GameResultsModal(props) {
     const dispatch = useDispatch();
     let handleTimer = useRef(null);
     
+    const user = useSelector(store => store.user);
     const initializeGame = useSelector(store => store.initializeGame);
     const matchCount = useSelector(store => store.matchCount);
     const turnCount = useSelector(store => store.turnCount);
     const timer = useSelector(store => store.timer);
+    const highScore = useSelector(store => store.highScore);
 
     const [fontLoaded, setFontLoaded] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
@@ -122,9 +125,19 @@ function GameResultsModal(props) {
     }, [initializeGame]);
 
     useEffect(() => {
-        if (matchCount === 1) {
+        if (matchCount === 8) {
             clearInterval(handleTimer.current);
             setModalOpen(true);
+            const score = Math.floor((5000 / (turnCount / 2)) + (5000 / timer));
+
+            if (score > highScore.score) {
+                const result = {
+                    turn: turnCount,
+                    time: timer,
+                    score: score
+                }
+                dispatch(updateHighScore(user._id, normal, result));
+            }
         }
         if (matchCount !== 8 && modalOpen) {
             setModalOpen(false);
@@ -152,7 +165,7 @@ function GameResultsModal(props) {
                             </Row>
                         </Grid>
                         <Text style={fontLoaded ? [styles.subtitle, {fontFamily: 'Bangers'}] : null}>
-                            Total Score
+                            {Math.floor((5000 / (turnCount / 2)) + (5000 / timer)) > highScore.score ? 'New High Score!' : 'Total Score'}
                         </Text>
                         <Text style={fontLoaded ? [styles.text2, {fontFamily: 'Bangers'}] : null}>
                             {Math.floor((5000 / (turnCount / 2)) + (5000 / timer))} Pts

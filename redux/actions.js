@@ -131,3 +131,27 @@ export const RESTART_GAME_SESSION = 'RESTART_GAME_SESSION';
 export const restartGameSession = () => ({
 	type: RESTART_GAME_SESSION
 });
+
+export const SET_CARD_THEME = 'SET_CARD_THEME';
+export const setCardTheme = (cardTheme) => ({
+    type: SET_CARD_THEME,
+    cardTheme
+});
+
+export const SET_USER = 'SET_USER';
+export const setUser = (user) => ({
+    type: SET_USER,
+    user
+});
+
+export const SET_LEADER_BOARD = 'SET_LEADER_BOARD';
+export const setLeaderBoard = (leaderBoard) => ({
+    type: SET_LEADER_BOARD,
+    leaderBoard
+});
+
+export const SET_HIGH_SCORE = 'SET_HIGH_SCORE';
+export const setHighScore = (highScore) => ({
+    type: SET_HIGH_SCORE,
+    highScore
+});

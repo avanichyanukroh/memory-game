@@ -51,10 +51,7 @@ const styles = StyleSheet.create({
     },
     rowContainer: {
         alignItems: 'center',
-        justifyContent:'flex-start',
-        // borderRadius: 4,
-        // borderWidth: 2,
-        // borderColor: 'green'
+        justifyContent:'flex-start'
     }
   });
 
@@ -200,25 +197,20 @@ function GameSession(props) {
             <GameResultsModal history={props.history} />
             <GameHeader history={props.history} />
             <View style={styles.contentContainer}>
-                {/* <LinearGradient
-                                colors={['#900048', '#ff4057']}
-                                style={styles.linearGradientContainer}
-                > */}
-                    <Grid style={styles.gridContainer}>
-                        <Row style={styles.rowContainer}>
-                            {renderGameGridRow(1)}
-                        </Row>
-                        <Row style={styles.rowContainer}>
-                            {renderGameGridRow(2)}
-                        </Row>
-                        <Row style={styles.rowContainer}>
-                            {renderGameGridRow(3)}
-                        </Row>
-                        <Row style={styles.rowContainer}>
-                            {renderGameGridRow(4)}
-                        </Row>
-                    </Grid>
-                {/* </LinearGradient> */}
+                <Grid style={styles.gridContainer}>
+                    <Row style={styles.rowContainer}>
+                        {renderGameGridRow(1)}
+                    </Row>
+                    <Row style={styles.rowContainer}>
+                        {renderGameGridRow(2)}
+                    </Row>
+                    <Row style={styles.rowContainer}>
+                        {renderGameGridRow(3)}
+                    </Row>
+                    <Row style={styles.rowContainer}>
+                        {renderGameGridRow(4)}
+                    </Row>
+                </Grid>
             </View>
       </Container>
     );
