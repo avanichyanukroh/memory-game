@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
       width: 80,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#ff0000',
+      backgroundColor: '#f4f4f4',
       backfaceVisibility: 'hidden',
       borderRadius: 4,
       overflow: 'hidden'
@@ -50,6 +50,10 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         marginLeft: 'auto',
         marginRight: 'auto'
+    },
+    cardText: {
+        fontSize: 18,
+        fontWeight: '600',
     }
   });
 
@@ -78,14 +82,14 @@ class FlipCard extends Component {
             Animated.spring(this.animatedValue,{
                 toValue: 0,
                 friction: 8,
-                tension: 10
+                tension: 20
             }).start();
         }
         else {
             Animated.spring(this.animatedValue,{
                 toValue: 180,
                 friction: 8,
-                tension: 10
+                tension: 20
             }).start();
         }
     }
@@ -132,14 +136,17 @@ class FlipCard extends Component {
                         </Animated.View>
                     </TouchableOpacity>
                     <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
-                        <Image
-                            style={{width: '100%', height: '100%'}}
-                            source={nameToUrlMap[`${this.props.value}`]}
-                            resizeMode={'cover'}
-                        />
-                </Animated.View>
-              </View>
-              
+                        {this.props.isImage ?
+                            <Image
+                                style={{width: '100%', height: '100%'}}
+                                source={valueToUrlMap[`${this.props.value}`]}
+                                resizeMode={'cover'}
+                            />
+                            :
+                            <Text style={styles.cardText}>{valueToTextMap[`${this.props.value}`]}</Text>
+                        }
+                    </Animated.View>
+                </View>
             </View>
           );
     }
@@ -152,10 +159,10 @@ const mapStateToProps = (state, ownProps) => {
         matchCompare: state.matchCompare
     };
 }
-    
+
 export default connect(mapStateToProps)(FlipCard);
 
-const nameToUrlMap = {
+const valueToUrlMap = {
     australianShepherd: require('../assets/images/puppies/australian-shepherd.jpg'),
     corgi: require('../assets/images/puppies/corgi.jpg'),
     frenchie: require('../assets/images/puppies/frenchie.jpg'),
@@ -163,5 +170,40 @@ const nameToUrlMap = {
     husky: require('../assets/images/puppies/husky.jpg'),
     labrador: require('../assets/images/puppies/labrador.jpg'),
     pug: require('../assets/images/puppies/pug.jpg'),
-    rottweiler: require('../assets/images/puppies/rottweiler.jpg')
+    rottweiler: require('../assets/images/puppies/rottweiler.jpg'),
+    baseball: require('../assets/images/sports/baseball.jpg'),
+    basketball: require('../assets/images/sports/basketball.jpg'),
+    football: require('../assets/images/sports/football.jpg'),
+    hockey: require('../assets/images/sports/hockey.jpg'),
+    lacrosse: require('../assets/images/sports/lacrosse.jpg'),
+    soccer: require('../assets/images/sports/soccer.jpg'),
+    tennis: require('../assets/images/sports/tennis.jpg'),
+    volleyball: require('../assets/images/sports/volleyball.jpg')
+}
+
+const valueToTextMap = {
+    australianShepherd: 'Australian Shepherd',
+    corgi: 'Corgi',
+    frenchie: 'Frenchie',
+    goldenRetriever: 'Golden Retriever',
+    husky: 'Husky',
+    labrador: 'Labrador',
+    pug: 'Pug',
+    rottweiler: 'Rottweiler',
+    baseball: 'Baseball',
+    basketball: 'Basketball',
+    football: 'Football',
+    hockey: 'Hockey',
+    lacrosse: 'Lacrosse',
+    soccer: 'Soccer',
+    tennis: 'Tennis',
+    volleyball: 'Volleyball',
+    red: 'Red',
+    blue: 'Blue',
+    green: 'Green',
+    purple: 'Purple',
+    orange: 'Orange',
+    pink: 'Pink',
+    yellow: 'Yellow',
+    white: 'White'
 }

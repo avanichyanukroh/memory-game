@@ -27,7 +27,9 @@ import {
     SET_LEADER_BOARD,
     SET_HIGH_SCORE,
     SET_LOADING,
-    SET_ERROR
+    SET_ERROR,
+    INCR_ROUND,
+    SET_INITIALIZE_ROUND
 } from './actions';
 
 const initialState = {
@@ -58,7 +60,8 @@ const initialState = {
     leaderBoard: null,
     highScore: null,
     loading: null,
-    error: null
+    error: null,
+    round: 3
 }
 
 
@@ -218,7 +221,8 @@ export const reducers = (state = initialState, action) => {
             matchCompare: [],
             turnCount: 0,
             matchCount: 0,
-            timer: 0
+            timer: 0,
+            round: 1
         });
     }
 
@@ -263,6 +267,36 @@ export const reducers = (state = initialState, action) => {
 		return Object.assign({}, state, {
             error: action.component,
             loading: null
+        });
+    }
+
+    if (action.type === INCR_ROUND) {
+		return Object.assign({}, state, {
+            round: state.round + 1
+        });
+    }
+
+    if (action.type === SET_INITIALIZE_ROUND) {
+		return Object.assign({}, state, {
+            cardFlip0: false,
+            cardFlip1: false,
+            cardFlip2: false,
+            cardFlip3: false,
+            cardFlip4: false,
+            cardFlip5: false,
+            cardFlip6: false,
+            cardFlip7: false,
+            cardFlip8: false,
+            cardFlip9: false,
+            cardFlip10: false,
+            cardFlip11: false,
+            cardFlip12: false,
+            cardFlip13: false,
+            cardFlip14: false,
+            cardFlip15: false,
+            cardShuffle: false,
+            matchCompare: [],
+            matchCount: 0
         });
     }
 

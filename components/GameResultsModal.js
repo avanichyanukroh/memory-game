@@ -81,6 +81,10 @@ const styles = StyleSheet.create({
         width: '100%',
         color: 'black',
         fontSize: 32
+    },
+    fontStyle: {
+        fontFamily: 'Bangers',
+        letterSpacing: 1
     }
 });
 
@@ -94,6 +98,7 @@ function GameResultsModal(props) {
     const turnCount = useSelector(store => store.turnCount);
     const timer = useSelector(store => store.timer);
     const highScore = useSelector(store => store.highScore);
+    const round = useSelector(store => store.round);
 
     const [fontLoaded, setFontLoaded] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
@@ -122,27 +127,44 @@ function GameResultsModal(props) {
             handleTimer.current = setInterval(() => dispatch(incrTimer()), 1000);
         }
 
+        if (!initializeGame) {
+            clearInterval(handleTimer.current);
+        }
+
+        return () => clearInterval(handleTimer.current);
+
     }, [initializeGame]);
 
     useEffect(() => {
-        if (matchCount === 8) {
-            clearInterval(handleTimer.current);
+        if (!initializeGame && round === 3 && matchCount === 8) {
             setModalOpen(true);
+
             const score = Math.floor((5000 / (turnCount / 2)) + (5000 / timer));
 
-            if (score > highScore.score) {
-                const result = {
-                    turn: turnCount,
-                    time: timer,
-                    score: score
+            if (user !== null) {
+                if (highScore === null || highScore === '') {
+                    const result = {
+                        turn: turnCount,
+                        time: timer,
+                        score: score
+                    }
+                    dispatch(updateHighScore(user._id, 'normal', result));
                 }
-                dispatch(updateHighScore(user._id, normal, result));
+                if (highScore !== null && score > highScore.score) {
+                    const result = {
+                        turn: turnCount,
+                        time: timer,
+                        score: score
+                    }
+                    dispatch(updateHighScore(user._id, 'normal', result));
+                }
             }
         }
-        if (matchCount !== 8 && modalOpen) {
+        if (matchCount !== 8 && round !== 3 && modalOpen) {
             setModalOpen(false);
         }
-    }, [matchCount]);
+
+    }, [initializeGame, round]);
 
     return (
         <View>
@@ -153,28 +175,28 @@ function GameResultsModal(props) {
             >
                 <View style={styles.modalBackground}>
                     <View style={styles.modalContentContainer}>
-                        <Text style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>Victory!</Text>
+                        <Text style={fontLoaded ? [styles.title, styles.fontStyle] : null}>Victory!</Text>
                         <Grid>
                             <Row style={styles.rowContainer}>
-                                <Text style={fontLoaded ? [styles.text, {fontFamily: 'Bangers'}] : null}>
+                                <Text style={fontLoaded ? [styles.text, styles.fontStyle] : null}>
                                     Turn: {Math.floor(turnCount / 2)}
                                 </Text>
-                                <Text style={fontLoaded ? [styles.text, {fontFamily: 'Bangers'}] : null}>
+                                <Text style={fontLoaded ? [styles.text, styles.fontStyle] : null}>
                                     Time: {timer} Sec
                                 </Text>
                             </Row>
                         </Grid>
-                        <Text style={fontLoaded ? [styles.subtitle, {fontFamily: 'Bangers'}] : null}>
-                            {Math.floor((5000 / (turnCount / 2)) + (5000 / timer)) > highScore.score ? 'New High Score!' : 'Total Score'}
+                        <Text style={fontLoaded ? [styles.subtitle, styles.fontStyle] : null}>
+                            {highScore !== null && Math.floor((5000 / (turnCount / 2)) + (5000 / timer)) > highScore.score ? 'New High Score!' : 'Total Score'}
                         </Text>
-                        <Text style={fontLoaded ? [styles.text2, {fontFamily: 'Bangers'}] : null}>
+                        <Text style={fontLoaded ? [styles.text2, styles.fontStyle] : null}>
                             {Math.floor((5000 / (turnCount / 2)) + (5000 / timer))} Pts
                         </Text>
                         <Button style={[styles.button, styles.playButton]} onPress={restartGame}>
-                            <Text style={fontLoaded ? [styles.playButtonText, {fontFamily: 'Bangers'}] : null}>Play Again!</Text>
+                            <Text style={fontLoaded ? [styles.playButtonText, styles.fontStyle] : null}>Play Again!</Text>
                         </Button>
                         <Button style={[styles.button, styles.themeButton]} onPress={redirectMainMenu}>
-                            <Text style={fontLoaded ? [styles.themeButtonText, {fontFamily: 'Bangers'}] : null}>Main Menu</Text>
+                            <Text style={fontLoaded ? [styles.themeButtonText, styles.fontStyle] : null}>Main Menu</Text>
                         </Button>
                     </View>
                 </View>

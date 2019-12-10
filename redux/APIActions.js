@@ -21,6 +21,7 @@ export const loginUser = (username, pin) => dispatch => {
 }
 
 export const registerUser = (username, pin) => dispatch => {
+    dispatch(setLoading('signUp'));
     axios({
         method: 'post',
         url: 'https://flashback-api.herokuapp.com/api/user/',
@@ -38,6 +39,7 @@ export const registerUser = (username, pin) => dispatch => {
 }
 
 export const getLeaderBoard = (mode) => dispatch => {
+    dispatch(setLoading('leaderBoard'));
     axios({
         method: 'get',
         url: `https://flashback-api.herokuapp.com/api/score/${mode}`

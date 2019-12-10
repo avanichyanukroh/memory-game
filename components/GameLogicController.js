@@ -21,7 +21,9 @@ import {
     setCardFlip15,
     setMatchCompare,
     incrMatchCount,
-    setInitializeGame
+    setInitializeGame,
+    incrRound,
+    setInitializeRound
 } from '../redux/actions';
 
 const styles = StyleSheet.create({
@@ -34,6 +36,8 @@ function GameLogicController(props) {
     const matchCompare = useSelector(store => store.matchCompare);
     const initializeGame = useSelector(store => store.initializeGame);
     const cardShuffle = useSelector(store => store.cardShuffle);
+    const matchCount = useSelector(store => store.matchCount);
+    const round = useSelector(store => store.round);
 
     const cardFlipActions = [
         () => dispatch(setCardFlip0(false)),
@@ -55,7 +59,6 @@ function GameLogicController(props) {
     ]
     
     function handleMatchCompare() {
-        console.log('handleMatchCompare() ', matchCompare[0].value, '===', matchCompare[1].value);
         if (matchCompare[0].value === matchCompare[1].value) {
             dispatch(setMatchCompare([]));
             dispatch(incrMatchCount());
@@ -68,7 +71,6 @@ function GameLogicController(props) {
     }
 
     function handleConseal() {
-        console.log('handleConceal()');
         cardFlipActions[0]();
         cardFlipActions[1]();
         cardFlipActions[2]();
@@ -88,7 +90,6 @@ function GameLogicController(props) {
     }
     
     function handleCardReveal() {
-        console.log('handleReveal()');
         dispatch(setCardFlip0(true));
         dispatch(setCardFlip1(true));
         dispatch(setCardFlip2(true));
@@ -107,29 +108,39 @@ function GameLogicController(props) {
         dispatch(setCardFlip15(true));
     }
 
-    useEffect(() => {
-        console.log('intializeGame: ',initializeGame);
-        if (!initializeGame && cardShuffle) {
-            console.log('SET TIME OUT RUN');
-            setTimeout(() => {
-                handleCardReveal();
-              }, 1500);
+    // useEffect(() => {
+    //     console.log('intializeGame: ',initializeGame);
+    //     if (!initializeGame && cardShuffle) {
+    //         console.log('SET TIME OUT RUN');
+    //         setTimeout(() => {
+    //             handleCardReveal();
+    //           }, 1500);
 
-              setTimeout(() => {
-                handleConseal();
-                dispatch(setInitializeGame(true));
-              }, 4500);
-        }
-    }, [initializeGame, cardShuffle]);
+    //           setTimeout(() => {
+    //             handleConseal();
+    //             dispatch(setInitializeGame(true));
+    //           }, 4500);
+    //     }
+    // }, [initializeGame, cardShuffle]);
 
     useEffect(() => {
-        console.log('MATCH COMPARE: ', matchCompare);
         if (matchCompare.length === 2) {
             setTimeout(() => {
                 handleMatchCompare();
               }, 600);
         }
     }, [matchCompare]);
+
+    useEffect(() => {
+        console.log('matchCount: ', matchCount, initializeGame);
+        if (matchCount === 8) {
+            dispatch(setInitializeGame(false));
+            if (round < 3) {
+                dispatch(setInitializeRound(true));
+                dispatch(incrRound());
+            }
+        }
+    }, [matchCount]);
 
     return (
         <>

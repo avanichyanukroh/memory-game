@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Container } from 'native-base';
+import { Container, Text } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import FlipCard from '../components/FlipCard';
 import {
@@ -25,7 +25,8 @@ import {
     setInitializeGame,
     setCardShuffle,
     incrTurnCount,
-    setMatchCompare
+    setMatchCompare,
+    setInitializeRound
 } from '../redux/actions';
 
 import GameLogicController from '../components/GameLogicController';
@@ -41,6 +42,26 @@ const styles = StyleSheet.create({
         justifyContent:'space-evenly',
         backgroundColor: '#454d66'
     },
+    gameIntro: {
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+        zIndex: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    text: {
+        textAlign: 'center',
+        color: '#fbe555',
+        fontSize: 48,
+        lineHeight: 0,
+        marginBottom: 16,
+        padding: 16
+    },
     linearGradientContainer: {
         height: '100%',
         width: '100%'
@@ -52,6 +73,10 @@ const styles = StyleSheet.create({
     rowContainer: {
         alignItems: 'center',
         justifyContent:'flex-start'
+    },
+    fontStyle: {
+        fontFamily: 'Bangers',
+        letterSpacing: 1
     }
   });
 
@@ -60,86 +85,93 @@ function GameSession(props) {
 
     const cardShuffle = useSelector(store => store.cardShuffle);
     const matchCompare = useSelector(store => store.matchCompare);
+    const initializeGame = useSelector(store => store.initializeGame);
+    const round = useSelector(store => store.round);
+
+    const [fadeAnim] = useState(new Animated.Value(1));
+    const [introDisplay, setIntroDisplay] = useState(true);
+    const [introText, setIntroText] = useState('Round 1');
+    const [fontLoaded, setFontLoaded] = useState(false);
 
     const cardFlipActions = [
         () => {
             dispatch(setCardFlip0(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 0, value: sampleData[0].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 0, value: cardData[0].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip1(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 1, value: sampleData[1].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 1, value: cardData[1].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip2(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 2, value: sampleData[2].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 2, value: cardData[2].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip3(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 3, value: sampleData[3].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 3, value: cardData[3].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip4(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 4, value: sampleData[4].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 4, value: cardData[4].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip5(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 5, value: sampleData[5].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 5, value: cardData[5].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip6(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 6, value: sampleData[6].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 6, value: cardData[6].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip7(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 7, value: sampleData[7].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 7, value: cardData[7].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip8(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 8, value: sampleData[8].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 8, value: cardData[8].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip9(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 9, value: sampleData[9].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 9, value: cardData[9].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip10(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 10, value: sampleData[10].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 10, value: cardData[10].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip11(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 11, value: sampleData[11].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 11, value: cardData[11].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip12(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 12, value: sampleData[12].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 12, value: cardData[12].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip13(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 13, value: sampleData[13].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 13, value: cardData[13].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip14(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 14, value: sampleData[14].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 14, value: cardData[14].name}]));
             dispatch(incrTurnCount());
         },
         () => {
             dispatch(setCardFlip15(true));
-            dispatch(setMatchCompare([...matchCompare, {index: 15, value: sampleData[15].name}]));
+            dispatch(setMatchCompare([...matchCompare, {index: 15, value: cardData[15].name}]));
             dispatch(incrTurnCount());
         }
     ]
@@ -165,34 +197,253 @@ function GameSession(props) {
 
     function renderGameGridRow(row) {
         if (!cardShuffle) {
-            randomizeData(sampleData);
+            randomizeData(cardData);
             dispatch(setCardShuffle(true));
         }
 
-        let data = sampleData;
+        let data = cardData;
         let startIndex = (row - 1) * 4;
         let endIndex = (row - 1) * 4 + 3;
         let gameGrid = [];
+        let valuePairTracker = {};
 
-        for (let i = startIndex; i <= endIndex; i++) {
-            gameGrid.push(
-                <View
-                    key={i}
-                >
+        if (round === 1) {
+            for (let i = startIndex; i <= endIndex; i++) {
+                gameGrid.push(
+                    <View
+                        key={i}
+                    >
                         <FlipCard
                             key={i}
                             value={data[i].name}
+                            isImage={true}
                             index={i}
                             cardFlipAction={cardFlipActions[i]}
                         />
-                </View>
-            );
+                    </View>
+                );
+            }
         }
+
+        if (round === 2) {
+            for (let i = startIndex; i <= endIndex; i++) {
+                gameGrid.push(
+                    <View
+                        key={i}
+                    >
+                        <FlipCard
+                            key={i}
+                            value={data[i].name}
+                            isImage={false}
+                            index={i}
+                            cardFlipAction={cardFlipActions[i]}
+                        />
+                    </View>
+                );
+            }
+        }
+
+        if (round === 3) {
+            for (let i = startIndex; i <= endIndex; i++) {
+                console.log(valuePairTracker);
+                gameGrid.push(
+                    <View
+                        key={i}
+                    >
+                        <FlipCard
+                            key={i}
+                            value={data[i].name}
+                            isImage={valuePairTracker[data[i].name] ? true : false}
+                            index={i}
+                            cardFlipAction={cardFlipActions[i]}
+                        />
+                    </View>
+                );
+                
+                if (!valuePairTracker[data[i].name]) {
+                    valuePairTracker[data[i].name] = true;
+                }
+            }
+        }
+
         return gameGrid;
     }
 
+    function handleIntroAnimation() {
+        setIntroText(`Round ${round}`)
+        setTimeout(() => setIntroText('Ready?'), 1000);
+        setTimeout(() => setIntroText('Set'), 2000);
+        setTimeout(() => {
+            setIntroText('Go!');
+        Animated.timing(
+            fadeAnim,
+            {
+              toValue: 0,
+              duration: 400,
+            }
+          ).start();
+          setTimeout(() => handleGameInitialization(), 300);
+        }, 3000);
+        
+    }
+
+    function handleGameInitialization() {
+        setIntroDisplay(false);
+        Animated.timing(
+            fadeAnim,
+            {
+                toValue: 1,
+                duration: 1,
+            }
+        ).start();
+
+        dispatch(setInitializeGame(true));
+    }
+
+    async function loadFont() {
+        await Font.loadAsync({
+            Bangers: require('../assets/fonts/Bangers-Regular.ttf'),
+        });
+    }
+
+    useEffect(() => {
+        loadFont().then(() =>setFontLoaded(true));
+    }, []);
+
+    useEffect(() => {
+        if (!initializeGame && round < 3) {
+            setIntroDisplay(true);
+            setTimeout(() => handleIntroAnimation(), 1000);
+        }
+    }, [initializeGame]);
+
+    useEffect(() => {
+        if (!initializeGame && round === 2) {
+            setIntroText('Round 2');
+            setIntroDisplay(true);
+            setTimeout(() => handleIntroAnimation(), 1000);
+            cardData = [
+                {
+                    name: 'red'
+                },
+                {
+                    name: 'red'
+                },
+                {
+                    name: 'blue'
+                },
+                {
+                    name: 'blue'
+                },
+                {
+                    name: 'green'
+                },
+                {
+                    name: 'green'
+                },
+                {
+                    name: 'purple'
+                },
+                {
+                    name: 'purple'
+                },
+                {
+                    name: 'orange'
+                },
+                {
+                    name: 'orange'
+                },
+                {
+                    name: 'pink'
+                },
+                {
+                    name: 'pink'
+                },
+                {
+                    name: 'yellow'
+                },
+                {
+                    name: 'yellow'
+                },
+                {
+                    name: 'white'
+                },
+                {
+                    name: 'white'
+                }
+            ];
+            dispatch(setCardShuffle(false));
+        }
+    }, [initializeGame, round]);
+
+    useEffect(() => {
+        if (!initializeGame && round === 3) {
+            setIntroText('Round 3');
+            setIntroDisplay(true);
+            setTimeout(() => handleIntroAnimation(), 1000);
+            cardData = [
+                {
+                    name: 'baseball'
+                },
+                {
+                    name: 'baseball'
+                },
+                {
+                    name: 'basketball'
+                },
+                {
+                    name: 'basketball'
+                },
+                {
+                    name: 'football'
+                },
+                {
+                    name: 'football'
+                },
+                {
+                    name: 'hockey'
+                },
+                {
+                    name: 'hockey'
+                },
+                {
+                    name: 'lacrosse'
+                },
+                {
+                    name: 'lacrosse'
+                },
+                {
+                    name: 'soccer'
+                },
+                {
+                    name: 'soccer'
+                },
+                {
+                    name: 'tennis'
+                },
+                {
+                    name: 'tennis'
+                },
+                {
+                    name: 'volleyball'
+                },
+                {
+                    name: 'volleyball'
+                }
+            ];
+            dispatch(setCardShuffle(false));
+        }
+    }, [initializeGame, round]);
+
     return (
         <Container>
+            {introDisplay ? 
+                <Animated.View style={[styles.gameIntro, {opacity: fadeAnim}]}>
+                    <Text style={fontLoaded ? [styles.text, styles.fontStyle] : null}>{introText}</Text>
+                </Animated.View>
+                : null
+            }
+
             <GameLogicController setInitializeGame={setInitializeGame} history={props.history} />
             <GameResultsModal history={props.history} />
             <GameHeader history={props.history} />
@@ -219,69 +470,53 @@ function GameSession(props) {
 export default GameSession;
 
 // 4x4 match, 8 pairs
-const sampleData = [
+let cardData = [
     {
-        name: 'australianShepherd',
-        url: require('../assets/images/puppies/australian-shepherd.jpg')
+        name: 'australianShepherd'
     },
     {
-        name: 'australianShepherd',
-        url: require('../assets/images/puppies/australian-shepherd.jpg')
+        name: 'australianShepherd'
     },
     {
-        name: 'corgi',
-        url: require('../assets/images/puppies/corgi.jpg')
+        name: 'corgi'
     },
     {
-        name: 'corgi',
-        url: require('../assets/images/puppies/corgi.jpg')
+        name: 'corgi'
     },
     {
-        name: 'frenchie',
-        url: require('../assets/images/puppies/frenchie.jpg')
+        name: 'frenchie'
     },
     {
-        name: 'frenchie',
-        url: require('../assets/images/puppies/frenchie.jpg')
+        name: 'frenchie'
     },
     {
-        name: 'goldenRetriever',
-        url: require('../assets/images/puppies/golden-retriever.jpg')
+        name: 'goldenRetriever'
     },
     {
-        name: 'goldenRetriever',
-        url: require('../assets/images/puppies/golden-retriever.jpg')
+        name: 'goldenRetriever'
     },
     {
-        name: 'husky',
-        url: require('../assets/images/puppies/husky.jpg')
+        name: 'husky'
     },
     {
-        name: 'husky',
-        url: require('../assets/images/puppies/husky.jpg')
+        name: 'husky'
     },
     {
-        name: 'labrador',
-        url: require('../assets/images/puppies/labrador.jpg')
+        name: 'labrador'
     },
     {
-        name: 'labrador',
-        url: require('../assets/images/puppies/labrador.jpg')
+        name: 'labrador'
     },
     {
-        name: 'pug',
-        url: require('../assets/images/puppies/pug.jpg')
+        name: 'pug'
     },
     {
-        name: 'pug',
-        url: require('../assets/images/puppies/pug.jpg')
+        name: 'pug'
     },
     {
-        name: 'rottweiler',
-        url: require('../assets/images/puppies/rottweiler.jpg')
+        name: 'rottweiler'
     },
     {
-        name: 'rottweiler',
-        url: require('../assets/images/puppies/rottweiler.jpg')
+        name: 'rottweiler'
     }
 ]

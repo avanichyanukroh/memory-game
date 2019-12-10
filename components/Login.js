@@ -3,14 +3,14 @@ import { StyleSheet, ScrollView } from 'react-native';
 import {  Text, Button, View, Form, Item, Input, Spinner } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loginUser } from '../redux/APIActions';
+import { loginUser, registerUser } from '../redux/APIActions';
 
 import { setError } from '../redux/actions';
 
 import * as Font from 'expo-font';
 
 const styles = StyleSheet.create({
-    modalContentContainer: {
+    modalContainer: {
         textAlign: 'center',
         backgroundColor: 'white',
         marginTop: '25%',
@@ -21,6 +21,13 @@ const styles = StyleSheet.create({
         height: '70%',
         width: '80%',
         borderRadius: 4
+    },
+    contentContainer: {
+        position: 'absolute',
+        top: 50,
+        bottom: 32,
+        left: 32,
+        right: 32,
     },
     title: {
         textAlign: 'center',
@@ -78,6 +85,10 @@ const styles = StyleSheet.create({
     errorMessage: {
         marginTop: 16,
         color: 'red'
+    },
+    fontStyle: {
+        fontFamily: 'Bangers',
+        letterSpacing: 1
     }
 });
 
@@ -93,12 +104,10 @@ function Login(props) {
     const [input, setInput] = useState({username: '', pin: '', pinConfirmation: ''});
 
     function handleInputChange(name, value) {
-        console.log('name, value', name, value);
         setInput({...input, [name]: value})
     }
 
     function handleLogin() {
-        console.log('logging in with: ', input.username, input.pin);
         dispatch(loginUser(input.username, input.pin));
     }
 
@@ -110,8 +119,7 @@ function Login(props) {
         
         if (input.username.length > 2 ) {
             if (input.pin === input.pinConfirmation) {
-                console.log('PINS MATCH!');
-                // dispatch(signUpUser(input.username, input.pin));
+                dispatch(registerUser(input.username, input.pin));
             }
             else {
                 dispatch(setError('pinMatch'));
@@ -147,92 +155,92 @@ function Login(props) {
     }, []);
 
     return (
-        <ScrollView keyboardShouldPersistTaps='handled' style={styles.modalContentContainer}>
+        <View style={styles.modalContainer}>
             <View style={styles.headerContainer}>
                 <Button style={styles.exitButton} transparent onPress={props.handleCloseModal}>
-                    <Text style={fontLoaded ? [styles.text, {fontFamily: 'Bangers'}] : null}>X</Text>
+                    <Text style={fontLoaded ? [styles.text, styles.fontStyle] : null}>X</Text>
                 </Button>
             </View>
-            
-            <Text style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>{formType === 'login' ? 'Welcome Back!' : 'Sign Up Below'}</Text>
-            <Form>
-                <Item>
-                    <Input
-                        textContentType="username"
-                        placeholder="Username"
-                        value={input.username}
-                        onChangeText={(value) => handleInputChange('username', value)}
-                        disabled={loading === 'login' ? true : false}
-                    />
-                </Item>
-                <Item last>
-                    <Input
-                        textContentType="password"
-                        type="password"
-                        secureTextEntry
-                        keyboardType="number-pad"
-                        placeholder="4 Digit Pin"
-                        value={input.pin}
-                        onChangeText={(value) => handleInputChange('pin', value)}
-                        disabled={loading === 'login' ? true : false}
-                    />
-                </Item>
-                {formType === 'signUp' ?
+            <ScrollView keyboardShouldPersistTaps='handled' style={styles.contentContainer}>
+                <Text style={fontLoaded ? [styles.title, styles.fontStyle] : null}>{formType === 'login' ? 'Welcome Back!' : 'Sign Up Below'}</Text>
+                <Form>
+                    <Item>
+                        <Input
+                            textContentType="username"
+                            placeholder="Username"
+                            value={input.username}
+                            onChangeText={(value) => handleInputChange('username', value)}
+                            disabled={loading === 'login' ? true : false}
+                        />
+                    </Item>
                     <Item last>
                         <Input
                             textContentType="password"
                             type="password"
                             secureTextEntry
                             keyboardType="number-pad"
-                            placeholder="Confirm 4 Digit Pin"
-                            value={input.pinConfirmation}
-                            onChangeText={(value) => handleInputChange('pinConfirmation', value)}
+                            placeholder="4 Digit Pin"
+                            value={input.pin}
+                            onChangeText={(value) => handleInputChange('pin', value)}
                             disabled={loading === 'login' ? true : false}
                         />
                     </Item>
-                    :
-                    null
-                }
-                {error === 'login' ?
-                    <Text style={styles.errorMessage}>Incorrect username or password</Text>
-                    :
-                    error === 'pinMatch' ?
-                        <Text style={styles.errorMessage}>Confirmation pin does not match</Text>
+                    {formType === 'signUp' ?
+                        <Item last>
+                            <Input
+                                textContentType="password"
+                                type="password"
+                                secureTextEntry
+                                keyboardType="number-pad"
+                                placeholder="Confirm 4 Digit Pin"
+                                value={input.pinConfirmation}
+                                onChangeText={(value) => handleInputChange('pinConfirmation', value)}
+                                disabled={loading === 'login' ? true : false}
+                            />
+                        </Item>
                         :
-                        error === 'usernameLength' ?
-                            <Text style={styles.errorMessage}>Username must be a minimum of 3 characters</Text>
+                        null
+                    }
+                    {error === 'login' ?
+                        <Text style={styles.errorMessage}>Incorrect username or password</Text>
+                        :
+                        error === 'pinMatch' ?
+                            <Text style={styles.errorMessage}>Confirmation pin does not match</Text>
                             :
-                            <Text style={styles.errorMessage}></Text>
-                }
-                
-            </Form>
-            {formType === 'login' ?
-                loading === 'login' ? 
-                    <>
+                            error === 'usernameLength' ?
+                                <Text style={styles.errorMessage}>Username must be a minimum of 3 characters</Text>
+                                :
+                                <Text style={styles.errorMessage}></Text>
+                    }
+                    
+                </Form>
+                {formType === 'login' ?
+                    loading === 'login' ? 
+                        <>
+                            <Spinner color='red' />
+                            <Button style={[styles.signUpButton]} onPress={handleFormChangeToSignUp} disabled={loading === 'signUp' ? true : false} bordered>
+                                <Text style={fontLoaded ? [styles.signUpButtonText, styles.fontStyle] : null}>Sign Up</Text>
+                            </Button>
+                        </>
+                        :
+                        <>
+                            <Button style={[styles.loginButton]} onPress={handleLogin}>
+                                <Text style={fontLoaded ? [styles.loginButtonText, styles.fontStyle] : null}>Login</Text>
+                            </Button>
+                            <Button style={[styles.signUpButton]} onPress={handleFormChangeToSignUp} disabled={loading === 'login' ? true : false} bordered>
+                                <Text style={fontLoaded ? [styles.signUpButtonText, styles.fontStyle] : null}>Sign Up</Text>
+                            </Button>
+                        </>
+                    :
+                    loading === 'signUp' ? 
                         <Spinner color='red' />
-                        <Button style={[styles.signUpButton]} onPress={handleFormChangeToSignUp} disabled={loading === 'signUp' ? true : false} bordered>
-                            <Text style={fontLoaded ? [styles.signUpButtonText, {fontFamily: 'Bangers'}] : null}>Sign Up</Text>
+                        :
+                        <Button style={[styles.loginButton]} onPress={handleSignUpSubmit}>
+                            <Text style={fontLoaded ? [styles.loginButtonText, styles.fontStyle] : null}>Submit</Text>
                         </Button>
-                    </>
-                    :
-                    <>
-                        <Button style={[styles.loginButton]} onPress={handleLogin}>
-                            <Text style={fontLoaded ? [styles.loginButtonText, {fontFamily: 'Bangers'}] : null}>Login</Text>
-                        </Button>
-                        <Button style={[styles.signUpButton]} onPress={handleFormChangeToSignUp} disabled={loading === 'login' ? true : false} bordered>
-                            <Text style={fontLoaded ? [styles.signUpButtonText, {fontFamily: 'Bangers'}] : null}>Sign Up</Text>
-                        </Button>
-                    </>
-                :
-                loading === 'signUp' ? 
-                    <Spinner color='red' />
-                    :
-                    <Button style={[styles.loginButton]} onPress={handleSignUpSubmit}>
-                        <Text style={fontLoaded ? [styles.loginButtonText, {fontFamily: 'Bangers'}] : null}>Submit</Text>
-                    </Button>
-        }
-            
-        </ScrollView>
+            }
+            </ScrollView>
+        </View>
     );
 }
 

@@ -44,6 +44,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 0
     },
+    fontStyle: {
+        fontFamily: 'Bangers',
+        letterSpacing: 1
+    }
 });
 
 function Picker(props) {
@@ -62,12 +66,12 @@ function Picker(props) {
     return (
         <View style={styles.modalBackground}>
             <View style={styles.modalContentContainer}>
-                <Text style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>Choose your Theme</Text>
+                <Text style={fontLoaded ? [styles.title, styles.fontStyle] : null}>Choose your Theme</Text>
                 <Grid>
                     {props.items.map((item, index) => {
                         return (
                             <Row style={styles.rowContainer} key={index}>
-                                <Text style={fontLoaded ? [styles.subtitle, {fontFamily: 'Bangers'}] : null}>
+                                <Text style={fontLoaded ? [styles.subtitle, styles.fontStyle] : null}>
                                     {item}
                                 </Text>
                             </Row>

@@ -167,3 +167,13 @@ export const setError = (component) => ({
     type: SET_ERROR,
     component
 });
+
+export const INCR_ROUND = 'INCR_ROUND';
+export const incrRound = () => ({
+    type: INCR_ROUND
+});
+
+export const SET_INITIALIZE_ROUND = 'SET_INITIALIZE_ROUND';
+export const setInitializeRound = () => ({
+	type: SET_INITIALIZE_ROUND
+});

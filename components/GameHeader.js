@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
     },
     linkText: {
         color: '#ff0000'
+    },
+    fontStyle: {
+        fontFamily: 'Bangers',
+        letterSpacing: 1
     }
   });
 
@@ -58,16 +62,16 @@ function GameHeader(props) {
             {/* <Left> */}
                 <Button iconLeft light transparent onPress={redirectMainMenu}>
                     <Icon style={styles.arrowIcon} name='arrow-back' />
-                    <Text style={fontLoaded ? [styles.linkText, {fontFamily: 'Bangers'}] : null}>Exit</Text>
+                    <Text style={fontLoaded ? [styles.linkText, styles.fontStyle] : null}>Exit</Text>
                 </Button>
             {/* </Left> */}
             <View style={styles.gridWrapper}>
                 <Grid>
                     <Row style={styles.rowContainer}>
-                        <Title style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>
+                        <Title style={fontLoaded ? [styles.title, styles.fontStyle] : null}>
                             Turn: {Math.floor(turnCount / 2)}
                         </Title>
-                        <Title style={fontLoaded ? [styles.title, {fontFamily: 'Bangers'}] : null}>
+                        <Title style={fontLoaded ? [styles.title, styles.fontStyle] : null}>
                             Time: {timer} Sec
                         </Title>
                     </Row>
