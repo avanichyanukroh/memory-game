@@ -112,6 +112,12 @@ function GameResultsModal(props) {
         props.history.push('/');
     }
 
+    function scoreFormula(turn, time) {
+        const score = Math.floor((5000 / (turn / 2)) + (5000 / time));
+
+        return score;
+    }
+
     async function loadFont() {
         await Font.loadAsync({
             Bangers: require('../assets/fonts/Bangers-Regular.ttf'),
@@ -136,10 +142,10 @@ function GameResultsModal(props) {
     }, [initializeGame]);
 
     useEffect(() => {
-        if (!initializeGame && round === 3 && matchCount === 8) {
+        if (!initializeGame && round === 4 && matchCount === 8) {
             setModalOpen(true);
 
-            const score = Math.floor((5000 / (turnCount / 2)) + (5000 / timer));
+            const score = scoreFormula(turnCount, timer);
 
             if (user !== null) {
                 if (highScore === null || highScore === '') {
@@ -160,7 +166,7 @@ function GameResultsModal(props) {
                 }
             }
         }
-        if (matchCount !== 8 && round !== 3 && modalOpen) {
+        if (matchCount !== 8 && round !== 4 && modalOpen) {
             setModalOpen(false);
         }
 
@@ -187,10 +193,10 @@ function GameResultsModal(props) {
                             </Row>
                         </Grid>
                         <Text style={fontLoaded ? [styles.subtitle, styles.fontStyle] : null}>
-                            {highScore !== null && Math.floor((5000 / (turnCount / 2)) + (5000 / timer)) > highScore.score ? 'New High Score!' : 'Total Score'}
+                            {highScore !== null && scoreFormula(turnCount, timer) > highScore.score ? 'New High Score!' : 'Total Score'}
                         </Text>
                         <Text style={fontLoaded ? [styles.text2, styles.fontStyle] : null}>
-                            {Math.floor((5000 / (turnCount / 2)) + (5000 / timer))} Pts
+                            {scoreFormula(turnCount, timer)} Pts
                         </Text>
                         <Button style={[styles.button, styles.playButton]} onPress={restartGame}>
                             <Text style={fontLoaded ? [styles.playButtonText, styles.fontStyle] : null}>Play Again!</Text>

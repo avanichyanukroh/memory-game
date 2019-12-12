@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useRef  } from 'react';
-import {StyleSheet, Text } from 'react-native';
-import {  Header, Title, Button, Left, Right, Body, Grid, Row, Icon, View } from 'native-base';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect  } from 'react';
+import {StyleSheet, ScrollView } from 'react-native';
+import { Button, Grid, Row, View, Text } from 'native-base';
 
 import * as Font from 'expo-font';
 
 const styles = StyleSheet.create({
-    modalBackground: {
-        height: '100%',
-        width: '100%'
-    },
-    modalContentContainer: {
+    modalContainer: {
         textAlign: 'center',
         backgroundColor: 'white',
         marginTop: '25%',
+        marginBottom: '25%',
         marginLeft: 'auto',
         marginRight: 'auto',
         padding: 32,
@@ -21,12 +17,20 @@ const styles = StyleSheet.create({
         width: '80%',
         borderRadius: 4
     },
+    contentContainer: {
+        position: 'absolute',
+        top: 50,
+        bottom: 32,
+        left: 32,
+        right: 32
+    },
     title: {
         textAlign: 'center',
         color: '#ff0000',
         fontSize: 24,
         lineHeight: 0,
-        marginBottom: 16
+        marginTop: 32,
+        marginBottom: 32
     },
     subtitle: {
         textAlign: 'center',
@@ -38,11 +42,28 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center'
     },
+    headerContainer: {
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+        margin: -24
+    },
+    exitButton: {
+        height: 50,
+        width: 50
+    },
+    exitIcon: {
+        color: '#ff0000',
+        fontSize: 36
+    },
     text: {
-        textAlign: 'center',
-        color: 'white',
-        fontSize: 16,
-        lineHeight: 0
+        color: '#ff0000',
+        fontSize: 14,
+        lineHeight: 0,
+        letterSpacing: 1
+    },
+    userScoreContainer: {
+        display: 'flex',
+        justifyContent: 'space-between'
     },
     fontStyle: {
         fontFamily: 'Bangers',
@@ -50,7 +71,7 @@ const styles = StyleSheet.create({
     }
 });
 
-function Picker(props) {
+function ThemePicker(props) {
     const [fontLoaded, setFontLoaded] = useState(false);
 
     async function loadFont() {
@@ -64,10 +85,15 @@ function Picker(props) {
     }, []);
 
     return (
-        <View style={styles.modalBackground}>
-            <View style={styles.modalContentContainer}>
-                <Text style={fontLoaded ? [styles.title, styles.fontStyle] : null}>Choose your Theme</Text>
-                <Grid>
+        <View style={styles.modalContainer}>
+            <View style={styles.headerContainer}>
+                <Button style={styles.exitButton} transparent onPress={props.handleCloseModal}>
+                    <Text style={fontLoaded ? [styles.exitIcon, styles.fontStyle] : null}>X</Text>
+                </Button>
+            </View>
+            <ScrollView keyboardShouldPersistTaps='handled' style={styles.contentContainer}>
+                <Text style={fontLoaded ? [styles.title, styles.fontStyle] : null}>Coming Soon!</Text>
+                {/* <Grid>
                     {props.items.map((item, index) => {
                         return (
                             <Row style={styles.rowContainer} key={index}>
@@ -77,10 +103,10 @@ function Picker(props) {
                             </Row>
                         );
                     })}
-                </Grid>
-            </View>
+                </Grid> */}
+            </ScrollView>
         </View>
     );
 }
 
-export default Picker;
+export default ThemePicker;

@@ -61,7 +61,7 @@ const initialState = {
     highScore: null,
     loading: null,
     error: null,
-    round: 3
+    round: 1
 }
 
 

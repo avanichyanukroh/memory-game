@@ -108,20 +108,17 @@ function GameLogicController(props) {
         dispatch(setCardFlip15(true));
     }
 
-    // useEffect(() => {
-    //     console.log('intializeGame: ',initializeGame);
-    //     if (!initializeGame && cardShuffle) {
-    //         console.log('SET TIME OUT RUN');
-    //         setTimeout(() => {
-    //             handleCardReveal();
-    //           }, 1500);
+    useEffect(() => {
+        if (!initializeGame && cardShuffle && round === 4) {
+            setTimeout(() => {
+                handleCardReveal();
+              }, 3000);
 
-    //           setTimeout(() => {
-    //             handleConseal();
-    //             dispatch(setInitializeGame(true));
-    //           }, 4500);
-    //     }
-    // }, [initializeGame, cardShuffle]);
+              setTimeout(() => {
+                handleConseal();
+              }, 8000);
+        }
+    }, [initializeGame, cardShuffle, round]);
 
     useEffect(() => {
         if (matchCompare.length === 2) {
@@ -132,10 +129,9 @@ function GameLogicController(props) {
     }, [matchCompare]);
 
     useEffect(() => {
-        console.log('matchCount: ', matchCount, initializeGame);
         if (matchCount === 8) {
             dispatch(setInitializeGame(false));
-            if (round < 3) {
+            if (round < 4) {
                 dispatch(setInitializeRound(true));
                 dispatch(incrRound());
             }

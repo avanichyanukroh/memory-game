@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
       width: 80,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#f4f4f4',
       backfaceVisibility: 'hidden',
       borderRadius: 4,
       overflow: 'hidden'
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto'
     },
     cardText: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: '600',
     }
   });
@@ -135,7 +134,14 @@ class FlipCard extends Component {
                                 </LinearGradient>
                         </Animated.View>
                     </TouchableOpacity>
-                    <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.flipCardBack]}>
+                    <Animated.View
+                        style={[
+                            backAnimatedStyle,
+                            styles.flipCard,
+                            styles.flipCardBack,
+                            {backgroundColor: this.props.backgroundColor}
+                        ]}
+                    >
                         {this.props.isImage ?
                             <Image
                                 style={{width: '100%', height: '100%'}}
@@ -143,7 +149,11 @@ class FlipCard extends Component {
                                 resizeMode={'cover'}
                             />
                             :
-                            <Text style={styles.cardText}>{valueToTextMap[`${this.props.value}`]}</Text>
+                            <Text
+                                style={[styles.cardText, {color: this.props.textColor}]}
+                            >
+                                {valueToTextMap[`${this.props.value}`]}
+                            </Text>
                         }
                     </Animated.View>
                 </View>

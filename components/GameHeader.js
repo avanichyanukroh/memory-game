@@ -59,12 +59,10 @@ function GameHeader(props) {
 
     return (
         <Header style={styles.header}>
-            {/* <Left> */}
-                <Button iconLeft light transparent onPress={redirectMainMenu}>
-                    <Icon style={styles.arrowIcon} name='arrow-back' />
-                    <Text style={fontLoaded ? [styles.linkText, styles.fontStyle] : null}>Exit</Text>
-                </Button>
-            {/* </Left> */}
+            <Button iconLeft light transparent onPress={redirectMainMenu}>
+                <Icon style={styles.arrowIcon} name='arrow-back' />
+                <Text style={fontLoaded ? [styles.linkText, styles.fontStyle] : null}>Exit</Text>
+            </Button>
             <View style={styles.gridWrapper}>
                 <Grid>
                     <Row style={styles.rowContainer}>

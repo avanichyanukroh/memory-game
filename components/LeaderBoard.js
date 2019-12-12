@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import {  Text, Button, View, List, ListItem, Spinner } from 'native-base';
+import { Text, Button, View, List, ListItem, Spinner } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getLeaderBoard } from '../redux/APIActions';
-
-import { setError } from '../redux/actions';
 
 import * as Font from 'expo-font';
 
@@ -27,25 +25,15 @@ const styles = StyleSheet.create({
         top: 50,
         bottom: 32,
         left: 32,
-        right: 32,
+        right: 32
     },
     title: {
         textAlign: 'center',
         color: '#fbe555',
-        fontSize: 24,
+        fontSize: 32,
         lineHeight: 0,
         marginTop: 32,
         marginBottom: 32
-    },
-    subtitle: {
-        textAlign: 'center',
-        color: '#000028',
-        fontSize: 24,
-        lineHeight: 0
-    },
-    rowContainer: {
-        justifyContent: 'flex-start',
-        alignItems: 'center'
     },
     headerContainer: {
         justifyContent: 'flex-end',
@@ -109,7 +97,6 @@ function LeaderBoard(props) {
 
     return (
         <View style={styles.modalContainer}>
-            {console.log('leaderBoard: ', leaderBoard)}
             <View style={styles.headerContainer}>
                 <Button style={styles.exitButton} transparent onPress={props.handleCloseModal}>
                     <Text style={fontLoaded ? [styles.exitIcon, styles.fontStyle] : null}>X</Text>
@@ -118,10 +105,10 @@ function LeaderBoard(props) {
             <ScrollView keyboardShouldPersistTaps='handled' style={styles.contentContainer}>
                 <Text style={fontLoaded ? [styles.title, styles.fontStyle] : null}>Leader Board</Text>
                     <List>
-                        {loading ?
+                        {loading === 'leaderBoard' ?
                             <Spinner color='white' />
                             :
-                            leaderBoard === 'leaderBoard' ?
+                            leaderBoard ?
                                 leaderBoard.map((userScore, index) => (
                                     <ListItem style={styles.userScoreContainer} key={index}>
                                         <Text style={fontLoaded ? [styles.text, styles.fontStyle] : null}>{index + 1}) {userScore.user.username}</Text>

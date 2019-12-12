@@ -35,6 +35,8 @@ import GameHeader from '../components/GameHeader';
 
 import * as Font from 'expo-font';
 
+import { puppies, colorText, sports, colorImage } from '../assets/cardData';
+
 const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
@@ -85,9 +87,11 @@ function GameSession(props) {
 
     const cardShuffle = useSelector(store => store.cardShuffle);
     const matchCompare = useSelector(store => store.matchCompare);
+    const matchCount = useSelector(store => store.matchCount);
     const initializeGame = useSelector(store => store.initializeGame);
     const round = useSelector(store => store.round);
 
+    const [cardData, setCardData] = useState(puppies);
     const [fadeAnim] = useState(new Animated.Value(1));
     const [introDisplay, setIntroDisplay] = useState(true);
     const [introText, setIntroText] = useState('Round 1');
@@ -205,72 +209,29 @@ function GameSession(props) {
         let startIndex = (row - 1) * 4;
         let endIndex = (row - 1) * 4 + 3;
         let gameGrid = [];
-        let valuePairTracker = {};
 
-        if (round === 1) {
-            for (let i = startIndex; i <= endIndex; i++) {
-                gameGrid.push(
-                    <View
+        for (let i = startIndex; i <= endIndex; i++) {
+            gameGrid.push(
+                <View
+                    key={i}
+                >
+                    <FlipCard
                         key={i}
-                    >
-                        <FlipCard
-                            key={i}
-                            value={data[i].name}
-                            isImage={true}
-                            index={i}
-                            cardFlipAction={cardFlipActions[i]}
-                        />
-                    </View>
-                );
-            }
-        }
-
-        if (round === 2) {
-            for (let i = startIndex; i <= endIndex; i++) {
-                gameGrid.push(
-                    <View
-                        key={i}
-                    >
-                        <FlipCard
-                            key={i}
-                            value={data[i].name}
-                            isImage={false}
-                            index={i}
-                            cardFlipAction={cardFlipActions[i]}
-                        />
-                    </View>
-                );
-            }
-        }
-
-        if (round === 3) {
-            for (let i = startIndex; i <= endIndex; i++) {
-                console.log(valuePairTracker);
-                gameGrid.push(
-                    <View
-                        key={i}
-                    >
-                        <FlipCard
-                            key={i}
-                            value={data[i].name}
-                            isImage={valuePairTracker[data[i].name] ? true : false}
-                            index={i}
-                            cardFlipAction={cardFlipActions[i]}
-                        />
-                    </View>
-                );
-                
-                if (!valuePairTracker[data[i].name]) {
-                    valuePairTracker[data[i].name] = true;
-                }
-            }
+                        value={data[i].name}
+                        isImage={data[i].isImage}
+                        index={i}
+                        cardFlipAction={cardFlipActions[i]}
+                        backgroundColor={data[i].backgroundColor}
+                        textColor={data[i].textColor}
+                    />
+                </View>
+            );
         }
 
         return gameGrid;
     }
 
     function handleIntroAnimation() {
-        setIntroText(`Round ${round}`)
         setTimeout(() => setIntroText('Ready?'), 1000);
         setTimeout(() => setIntroText('Set'), 2000);
         setTimeout(() => {
@@ -279,7 +240,7 @@ function GameSession(props) {
             fadeAnim,
             {
               toValue: 0,
-              duration: 400,
+              duration: 400
             }
           ).start();
           setTimeout(() => handleGameInitialization(), 300);
@@ -293,7 +254,7 @@ function GameSession(props) {
             fadeAnim,
             {
                 toValue: 1,
-                duration: 1,
+                duration: 1
             }
         ).start();
 
@@ -311,129 +272,68 @@ function GameSession(props) {
     }, []);
 
     useEffect(() => {
-        if (!initializeGame && round < 3) {
+        if (!initializeGame && round === 1) {
+            setIntroText('Match Pictures');
             setIntroDisplay(true);
+            setCardData(puppies);
             setTimeout(() => handleIntroAnimation(), 1000);
         }
-    }, [initializeGame]);
+    }, [initializeGame, round]);
 
     useEffect(() => {
         if (!initializeGame && round === 2) {
-            setIntroText('Round 2');
+            setIntroText('Match Text');
             setIntroDisplay(true);
+            setCardData(colorText);
             setTimeout(() => handleIntroAnimation(), 1000);
-            cardData = [
-                {
-                    name: 'red'
-                },
-                {
-                    name: 'red'
-                },
-                {
-                    name: 'blue'
-                },
-                {
-                    name: 'blue'
-                },
-                {
-                    name: 'green'
-                },
-                {
-                    name: 'green'
-                },
-                {
-                    name: 'purple'
-                },
-                {
-                    name: 'purple'
-                },
-                {
-                    name: 'orange'
-                },
-                {
-                    name: 'orange'
-                },
-                {
-                    name: 'pink'
-                },
-                {
-                    name: 'pink'
-                },
-                {
-                    name: 'yellow'
-                },
-                {
-                    name: 'yellow'
-                },
-                {
-                    name: 'white'
-                },
-                {
-                    name: 'white'
-                }
-            ];
             dispatch(setCardShuffle(false));
         }
     }, [initializeGame, round]);
 
     useEffect(() => {
         if (!initializeGame && round === 3) {
-            setIntroText('Round 3');
+            setIntroText('Match Text To Picture');
             setIntroDisplay(true);
+            setCardData(sports);
             setTimeout(() => handleIntroAnimation(), 1000);
-            cardData = [
-                {
-                    name: 'baseball'
-                },
-                {
-                    name: 'baseball'
-                },
-                {
-                    name: 'basketball'
-                },
-                {
-                    name: 'basketball'
-                },
-                {
-                    name: 'football'
-                },
-                {
-                    name: 'football'
-                },
-                {
-                    name: 'hockey'
-                },
-                {
-                    name: 'hockey'
-                },
-                {
-                    name: 'lacrosse'
-                },
-                {
-                    name: 'lacrosse'
-                },
-                {
-                    name: 'soccer'
-                },
-                {
-                    name: 'soccer'
-                },
-                {
-                    name: 'tennis'
-                },
-                {
-                    name: 'tennis'
-                },
-                {
-                    name: 'volleyball'
-                },
-                {
-                    name: 'volleyball'
-                }
-            ];
             dispatch(setCardShuffle(false));
         }
-    }, [initializeGame, round]);
+    }, [initializeGame, round, matchCount]);
+
+    useEffect(() => {
+        if (!initializeGame && round === 4 && matchCount !== 8) {
+            setIntroText('Memorize And Match');
+            setIntroDisplay(true);
+            setCardData(colorImage);
+            setTimeout(() => {
+                Animated.timing(
+                    fadeAnim,
+                    {
+                    toValue: 0,
+                    duration: 400
+                    }
+                ).start();
+
+                setTimeout(() => setIntroDisplay(false), 300);
+            }, 2000);
+
+            setTimeout(() => {
+                setIntroText('Ready?');
+                setIntroDisplay(true);
+
+                Animated.timing(
+                    fadeAnim,
+                    {
+                        toValue: 1,
+                        duration: 1
+                    }
+                ).start();
+            }, 8000);
+            setTimeout(() => handleIntroAnimation(), 9000);
+            dispatch(setCardShuffle(false));
+
+        }
+    }, [initializeGame, round, matchCount]);
 
     return (
         <Container>
@@ -468,55 +368,3 @@ function GameSession(props) {
 }
 
 export default GameSession;
-
-// 4x4 match, 8 pairs
-let cardData = [
-    {
-        name: 'australianShepherd'
-    },
-    {
-        name: 'australianShepherd'
-    },
-    {
-        name: 'corgi'
-    },
-    {
-        name: 'corgi'
-    },
-    {
-        name: 'frenchie'
-    },
-    {
-        name: 'frenchie'
-    },
-    {
-        name: 'goldenRetriever'
-    },
-    {
-        name: 'goldenRetriever'
-    },
-    {
-        name: 'husky'
-    },
-    {
-        name: 'husky'
-    },
-    {
-        name: 'labrador'
-    },
-    {
-        name: 'labrador'
-    },
-    {
-        name: 'pug'
-    },
-    {
-        name: 'pug'
-    },
-    {
-        name: 'rottweiler'
-    },
-    {
-        name: 'rottweiler'
-    }
-]

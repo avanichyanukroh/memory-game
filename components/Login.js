@@ -32,20 +32,10 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         color: '#ff0000',
-        fontSize: 24,
+        fontSize: 32,
         lineHeight: 0,
         marginTop: 32,
         marginBottom: 32
-    },
-    subtitle: {
-        textAlign: 'center',
-        color: '#000028',
-        fontSize: 24,
-        lineHeight: 0
-    },
-    rowContainer: {
-        justifyContent: 'flex-start',
-        alignItems: 'center'
     },
     headerContainer: {
         justifyContent: 'flex-end',
@@ -76,7 +66,7 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50
     },
-    text: {
+    exitIcon: {
         textAlign: 'center',
         color: '#ff0000',
         fontSize: 36,
@@ -158,7 +148,7 @@ function Login(props) {
         <View style={styles.modalContainer}>
             <View style={styles.headerContainer}>
                 <Button style={styles.exitButton} transparent onPress={props.handleCloseModal}>
-                    <Text style={fontLoaded ? [styles.text, styles.fontStyle] : null}>X</Text>
+                    <Text style={fontLoaded ? [styles.exitIcon, styles.fontStyle] : null}>X</Text>
                 </Button>
             </View>
             <ScrollView keyboardShouldPersistTaps='handled' style={styles.contentContainer}>
