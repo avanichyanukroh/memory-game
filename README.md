@@ -7,7 +7,7 @@ A fun little project to learn React Native. Flashback is a simple mobile app gam
 
 Intro Screen:
 
-![Intro Screen](flashback-screenshot.png)
+![Intro Screen](flashback-screenshot.PNG)
 
 ## Built With
 
