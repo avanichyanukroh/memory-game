@@ -21,7 +21,9 @@ Intro Screen:
 ## Features
 
 * Calculates score based on accuracy and speed
+* User profile
 * Track high score
+* Leaderboard
 * Themes feature for different card images
 
 ## Future implementations
